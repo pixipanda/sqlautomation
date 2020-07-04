@@ -1,0 +1,9 @@
+idea
+./idea
+target
+./target
+build-files
+metastore_db
+derby.log
+sqlautomation.iml
+./sqlautomation.iml
