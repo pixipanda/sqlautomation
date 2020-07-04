@@ -1,6 +1,6 @@
 package com.pixipanda.sqlautomation.handler.load
 
-import com.pixipanda.Spark
+import com.pixipanda.sqlautomation.Spark
 import com.pixipanda.sqlautomation.config.save.SaveConfig
 import org.apache.spark.sql.functions.col
 

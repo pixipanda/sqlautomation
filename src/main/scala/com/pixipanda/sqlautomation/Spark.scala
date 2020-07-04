@@ -1,4 +1,4 @@
-package com.pixipanda
+package com.pixipanda.sqlautomation
 
 import org.apache.spark.sql.{SQLContext, SparkSession}
 import org.apache.spark.{SparkConf, SparkContext}

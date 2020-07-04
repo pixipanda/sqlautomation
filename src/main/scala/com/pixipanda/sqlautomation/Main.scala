@@ -1,4 +1,4 @@
-package com.pixipanda
+package com.pixipanda.sqlautomation
 
 import com.pixipanda.sqlautomation.pipeline.ETLPipeline
 
