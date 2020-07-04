@@ -1,4 +1,4 @@
-package com.pixipanda.handler
+package com.pixipanda.sqlautomation.handler
 
 trait Handler {
 

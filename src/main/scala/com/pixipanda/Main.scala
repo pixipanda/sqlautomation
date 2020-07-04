@@ -1,6 +1,6 @@
 package com.pixipanda
 
-import com.pixipanda.pipeline.ETLPipeline
+import com.pixipanda.sqlautomation.pipeline.ETLPipeline
 
 object Main extends Spark {
 

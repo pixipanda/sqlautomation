@@ -1,4 +1,4 @@
-package com.pixipanda.constants
+package com.pixipanda.sqlautomation.constants
 
 object Source {
 

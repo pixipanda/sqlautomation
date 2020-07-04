@@ -1,4 +1,4 @@
-package com.pixipanda.handler.transform
+package com.pixipanda.sqlautomation.handler.transform
 
 case class HiveTransformHandler(query: String, view: String) extends TransformHandler(query, view) {
 

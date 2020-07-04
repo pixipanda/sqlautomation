@@ -1,8 +1,8 @@
-package com.pixipanda.factory
+package com.pixipanda.sqlautomation.factory
 
 import com.pixipanda.sqlautomation.config.queryconfig.QueryConfig
-import com.pixipanda.constants.ETL
-import com.pixipanda.handler.Handler
+import com.pixipanda.sqlautomation.handler.Handler
+import com.pixipanda.sqlautomation.constants.ETL
 import com.typesafe.config.Config
 
 trait HandlerFactory {

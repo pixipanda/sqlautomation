@@ -1,6 +1,6 @@
 package com.pixipanda.sqlautomation.config.queryconfig
 
-import com.pixipanda.constants.ETL.LOAD
+import com.pixipanda.sqlautomation.constants.ETL.LOAD
 import com.pixipanda.sqlautomation.config.save.SaveConfig
 import com.typesafe.config.Config
 

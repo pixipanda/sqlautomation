@@ -1,10 +1,10 @@
-package com.pixipanda.pipeline
+package com.pixipanda.sqlautomation.pipeline
 
 import java.io.InputStreamReader
 
 import com.pixipanda.sqlautomation.config.ConfigRegistry
-import com.pixipanda.factory.HandlerFactory
-import com.pixipanda.handler.Handler
+import com.pixipanda.sqlautomation.factory.HandlerFactory
+import com.pixipanda.sqlautomation.handler.Handler
 import com.typesafe.config.{Config, ConfigFactory}
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{FileSystem, Path}

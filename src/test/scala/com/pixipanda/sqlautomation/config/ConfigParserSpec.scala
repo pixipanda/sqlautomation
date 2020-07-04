@@ -2,8 +2,8 @@ package com.pixipanda.sqlautomation.config
 
 import com.pixipanda.sqlautomation.config.queryconfig.{LoadConfig, TransformConfig}
 import com.pixipanda.sqlautomation.config.save.SaveConfig
-import com.pixipanda.constants.ETL
 import com.pixipanda.sqlautomation.TestingSparkSession
+import com.pixipanda.sqlautomation.constants.ETL
 import org.scalatest.{BeforeAndAfterAll, FunSpec}
 
 class ConfigParserSpec extends FunSpec with BeforeAndAfterAll{

@@ -1,7 +1,7 @@
-package com.pixipanda.factory
+package com.pixipanda.sqlautomation.factory
 
 import com.pixipanda.sqlautomation.config.queryconfig.{QueryConfig, TransformConfig}
-import com.pixipanda.handler.transform.{HiveTransformHandler, TransformHandler}
+import com.pixipanda.sqlautomation.handler.transform.{HiveTransformHandler, TransformHandler}
 import com.typesafe.config.Config
 
 case class TransformHandlerFactory() extends HandlerFactory {

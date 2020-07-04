@@ -1,6 +1,6 @@
 package com.pixipanda.sqlautomation.config.queryconfig
 
-import com.pixipanda.constants.ETL.TRANSFORM
+import com.pixipanda.sqlautomation.constants.ETL.TRANSFORM
 import com.typesafe.config.Config
 
 case class TransformConfig (override val order: Int, queryName: String, viewName: String, override val etlType: String) extends QueryConfig(order, etlType)

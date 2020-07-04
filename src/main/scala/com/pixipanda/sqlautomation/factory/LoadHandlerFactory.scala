@@ -1,9 +1,9 @@
-package com.pixipanda.factory
+package com.pixipanda.sqlautomation.factory
 
-import com.pixipanda.constants.Source._
+import com.pixipanda.sqlautomation.constants.Source._
 import com.pixipanda.sqlautomation.config.queryconfig.{LoadConfig, QueryConfig}
-import com.pixipanda.handler.load.jdbc.{DB2LoadHandler, TeradataLoadHandler}
-import com.pixipanda.handler.load.{HiveLoadHandler, LoadHandler}
+import com.pixipanda.sqlautomation.handler.load.jdbc.{DB2LoadHandler, TeradataLoadHandler}
+import com.pixipanda.sqlautomation.handler.load.{HiveLoadHandler, LoadHandler}
 import com.typesafe.config.Config
 
 class LoadHandlerFactory extends HandlerFactory {

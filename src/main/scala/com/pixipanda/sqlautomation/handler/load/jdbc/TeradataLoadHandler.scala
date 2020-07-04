@@ -1,4 +1,4 @@
-package com.pixipanda.handler.load.jdbc
+package com.pixipanda.sqlautomation.handler.load.jdbc
 
 import com.pixipanda.sqlautomation.config.save.SaveConfig
 

@@ -1,4 +1,4 @@
-package com.pixipanda.handler.load
+package com.pixipanda.sqlautomation.handler.load
 
 import com.pixipanda.Spark
 import com.pixipanda.sqlautomation.config.save.SaveConfig
