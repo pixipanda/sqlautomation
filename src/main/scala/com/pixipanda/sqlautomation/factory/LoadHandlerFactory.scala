@@ -6,7 +6,7 @@ import com.pixipanda.sqlautomation.handler.load.jdbc.{DB2LoadHandler, TeradataLo
 import com.pixipanda.sqlautomation.handler.load.{HiveLoadHandler, LoadHandler}
 import com.typesafe.config.Config
 
-class LoadHandlerFactory extends HandlerFactory {
+case class LoadHandlerFactory() extends HandlerFactory {
 
   def getHandler(config: Config, queryConfig: QueryConfig): LoadHandler = {
     val loadConfig = queryConfig.asInstanceOf[LoadConfig]

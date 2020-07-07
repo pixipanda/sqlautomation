@@ -2,23 +2,24 @@ package com.pixipanda.sqlautomation.pipeline
 
 import java.io.InputStreamReader
 
-import com.pixipanda.sqlautomation.config.ConfigRegistry
+import com.pixipanda.sqlautomation.config.SQLAutomate
 import com.pixipanda.sqlautomation.factory.HandlerFactory
 import com.pixipanda.sqlautomation.handler.Handler
 import com.typesafe.config.{Config, ConfigFactory}
-import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{FileSystem, Path}
 
 import scala.collection.mutable.ListBuffer
 
-class ETLPipeline {
+case class ETLPipeline() {
 
   private val handlers = ListBuffer[Handler]()
 
-  def addHandlers(handler: Handler): Unit = {
+  private def addHandlers(handler: Handler): Unit = {
 
     handlers.append(handler)
   }
+
+  def getHandlers: Seq[Handler] = handlers.toList
 
   def process(): Unit = {
     handlers.foreach(_.process())
@@ -27,21 +28,15 @@ class ETLPipeline {
 
 object ETLPipeline {
 
-  def buildPipeline(): ETLPipeline = {
+  def buildPipeline(sqlAutomate: SQLAutomate, fileSystem: FileSystem): ETLPipeline = {
 
-    val etlPipeline = new ETLPipeline
+    val etlPipeline = ETLPipeline()
 
-    val hadoopConfDir: String = System.getenv("HADOOP_CONF_DIR")
-    val hadoopConf: Configuration = new Configuration()
-    hadoopConf.addResource(new Path("file:///" + hadoopConfDir + "/core-site.xml"))
-    hadoopConf.addResource(new Path("file:///" + hadoopConfDir + "/hdfs-site.xml"))
-    val hdfs: FileSystem = FileSystem.get(hadoopConf)
-
-    ConfigRegistry.sqlAutomate.sqlConfigs.foreach(sqlConfig => {
-      val reader = new InputStreamReader(hdfs.open(new Path(sqlConfig.fileName)))
+    sqlAutomate.sqlConfigs.foreach(sqlConfig => {
+      val reader = new InputStreamReader(fileSystem.open(new Path(sqlConfig.fileName)))
       val config: Config = ConfigFactory.parseReader(reader)
       sqlConfig.queryConfigs.foreach(queryConfig => {
-        val handlerFactory = HandlerFactory(queryConfig)
+        val handlerFactory = HandlerFactory(queryConfig.etlType)
         val handler = handlerFactory.getHandler(config, queryConfig)
         etlPipeline.addHandlers(handler)
       })
@@ -49,3 +44,5 @@ object ETLPipeline {
     etlPipeline
   }
 }
+
+

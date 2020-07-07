@@ -3,7 +3,8 @@ package com.pixipanda.sqlautomation.config.jdbc
 import java.util.Properties
 
 import com.pixipanda.sqlautomation.config.ConfigRegistry
-import com.typesafe.config.Config
+import com.typesafe.config.{Config, ConfigFactory}
+import org.apache.log4j.Logger
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable
@@ -18,8 +19,26 @@ case class JdbcConfig(name:String,
 object JdbcConfig {
 
 
+  val logger: Logger = Logger.getLogger(getClass.getName)
 
-  lazy val jdbcConfigs: Map[String, JdbcConfig] = parseJdbc(ConfigRegistry.config)
+  def config: Option[Config] = {
+    val env = ConfigRegistry.getEnv
+    if (null != env) {
+      val config = ConfigFactory
+        .parseResources(s"$env.conf")
+        .resolve()
+      Some(config)
+    } else {
+      None
+    }
+  }
+
+  lazy val jdbcConfigs: Map[String, JdbcConfig] = config match {
+    case Some(config) => parseJdbc(config)
+    case None =>
+      logger.error("Empty config file")
+      Map.empty[String, JdbcConfig]
+  }
 
 
   def parseJdbc(config: Config): Map[String, JdbcConfig] = {

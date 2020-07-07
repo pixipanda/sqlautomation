@@ -12,11 +12,11 @@ trait HandlerFactory {
 
 object HandlerFactory{
 
-  def apply(queryConfig: QueryConfig): HandlerFactory = {
+  def apply(etlType: String): HandlerFactory = {
 
-    queryConfig.etlType match {
-      case ETL.LOAD => new LoadHandlerFactory
-      case ETL.TRANSFORM  => new TransformHandlerFactory
+    etlType match {
+      case ETL.LOAD => LoadHandlerFactory()
+      case ETL.TRANSFORM  => TransformHandlerFactory()
     }
   }
 

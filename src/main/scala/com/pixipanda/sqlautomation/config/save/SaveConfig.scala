@@ -25,6 +25,10 @@ object SaveConfig {
     if(config.hasPath("msckRepair")) Some(config.getBoolean("msckRepair")) else None
   }
 
+  private def parseFormat(config: Config): Option[String] = {
+
+    if(config.hasPath("msckRepair")) Some(config.getString("format")) else None
+  }
 
   private def getOptions(config: Config): Map[String, String] = {
 
@@ -35,7 +39,7 @@ object SaveConfig {
 
     options.put("db", config.getString("db"))
     options.put("table", config.getString("table"))
-    options.put("format", config.getString("format"))
+    parseFormat(config).foreach(options.put("format", _))
     options.put("mode", config.getString("mode"))
 
     options.toMap ++ jdbcOptions

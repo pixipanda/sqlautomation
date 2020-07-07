@@ -1,28 +1,37 @@
 package com.pixipanda.sqlautomation.config
 
 
+import java.io.File
+
 import com.pixipanda.sqlautomation.config.queryconfig.{LoadConfig, TransformConfig}
 import com.pixipanda.sqlautomation.config.save.SaveConfig
 import com.typesafe.config.{Config, ConfigFactory}
 import org.apache.log4j.Logger
 
+
+
 object ConfigRegistry {
+
+  val logger: Logger = Logger.getLogger(getClass.getName)
 
   var _env: String = _
 
   def apply(env: String): Unit = _env = env
 
-  val logger: Logger = Logger.getLogger(getClass.getName)
 
+  def setEnv(env: String): Unit = _env = env
 
-  def config: Config = {
-    val envConfig = ConfigFactory.parseResources(s"${_env}.conf")
+  def getEnv: String = _env
+
+  def config(file:String = null): Config = {
+    if(null != file)
+      ConfigFactory.parseFile(new File(file))
+    else
     ConfigFactory.load()
-      .withFallback(envConfig)
-      .resolve()
   }
 
-  lazy val sqlAutomate: SQLAutomate = SQLAutomate.parseSQLAutomate(config)
+
+  lazy val sqlAutomate: SQLAutomate = SQLAutomate.parseSQLAutomate(config())
 
 
   def debugTransformConfig(transformConfig: TransformConfig): Unit = {
@@ -41,9 +50,9 @@ object ConfigRegistry {
 
   def debugSaveConfig(save: SaveConfig): Unit = {
 
-    logger.info("order: " + save.sourceType)
-    logger.info("order: " + save.partition)
-    logger.info("order: " + save.MSCKRepair)
+    logger.info("sourceType: " + save.sourceType)
+    logger.info("partition: " + save.partition)
+    logger.info("MSCKRepair: " + save.MSCKRepair)
   }
 
 
