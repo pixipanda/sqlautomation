@@ -11,12 +11,16 @@ case class HiveLoadHandler(query: String, saveConfig: SaveConfig) extends LoadHa
     val df = spark.sql(query)
     val db = saveConfig.options("db")
     val table = saveConfig.options("table")
-    saveConfig.partition.foreach(columns => {
-      df.repartition(columns.map(col): _*)
+
+    val repartitionedDF = saveConfig.partition match {
+      case Some(columns) => df.repartition(columns.map(col): _*)
+      case None => df
+    }
+
+    repartitionedDF
         .write
         .format(saveConfig.options("format"))
         .mode(saveConfig.options("mode"))
         .saveAsTable(s"$db.$table")
-    })
   }
 }
