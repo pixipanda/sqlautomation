@@ -1,12 +1,9 @@
 package com.pixipanda.sqlautomation.pipeline
 
-import java.io.InputStreamReader
-
 import com.pixipanda.sqlautomation.config.SQLAutomate
 import com.pixipanda.sqlautomation.factory.HandlerFactory
 import com.pixipanda.sqlautomation.handler.Handler
-import com.typesafe.config.{Config, ConfigFactory}
-import org.apache.hadoop.fs.{FileSystem, Path}
+
 
 import scala.collection.mutable.ListBuffer
 
@@ -28,16 +25,14 @@ case class ETLPipeline() {
 
 object ETLPipeline {
 
-  def buildPipeline(sqlAutomate: SQLAutomate, fileSystem: FileSystem): ETLPipeline = {
+  def buildPipeline(sqlAutomate: SQLAutomate): ETLPipeline = {
 
     val etlPipeline = ETLPipeline()
 
     sqlAutomate.sqlConfigs.foreach(sqlConfig => {
-      val reader = new InputStreamReader(fileSystem.open(new Path(sqlConfig.fileName)))
-      val config: Config = ConfigFactory.parseReader(reader)
       sqlConfig.queryConfigs.foreach(queryConfig => {
         val handlerFactory = HandlerFactory(queryConfig.etlType)
-        val handler = handlerFactory.getHandler(config, queryConfig)
+        val handler = handlerFactory.getHandler(queryConfig)
         etlPipeline.addHandlers(handler)
       })
     })

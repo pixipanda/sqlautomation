@@ -13,18 +13,18 @@ class TransformHandlerSpec extends FunSpec{
     val configString =
       """
         | {
-        |   q1 = "SELECT * from db.table"
+        |   q1 = "SELECT * FROM db.table"
         | }
       """.stripMargin
 
 
-    val queryConfig = TransformConfig(1, "q1", "q1view", ETL.TRANSFORM)
-    val sparkHandler = SparkTransformHandler("SELECT * from db.table", "q1view")
+    val queryConfig = TransformConfig(1, "SELECT * FROM db.table", "q1view", ETL.TRANSFORM)
+    val sparkHandler = SparkTransformHandler("SELECT * FROM db.table", "q1view")
 
     it("should create Spark Load Handler") {
-      val config = ConfigFactory.parseString(configString)
+      ConfigFactory.parseString(configString)
       val transformHandlerFactory = TransformHandlerFactory()
-      val sut =transformHandlerFactory.getHandler(config, queryConfig)
+      val sut =transformHandlerFactory.getHandler(queryConfig)
       assert(sut == sparkHandler)
     }
   }

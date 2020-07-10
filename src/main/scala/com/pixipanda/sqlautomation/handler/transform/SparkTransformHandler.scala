@@ -1,6 +1,8 @@
 package com.pixipanda.sqlautomation.handler.transform
 
-case class SparkTransformHandler(query: String, view: String) extends TransformHandler(query, view) {
+import com.pixipanda.sqlautomation.Spark
+
+case class SparkTransformHandler(query: String, view: String) extends TransformHandler(query, view) with Spark{
 
   override def process(): Unit = {
     val df = spark.sql(query)

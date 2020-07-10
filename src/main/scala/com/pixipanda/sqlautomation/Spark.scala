@@ -21,7 +21,6 @@ object Spark {
       .set("hive.exec.dynamic.partition", "true")
       .set("hive.exec.dynamic.partition.mode", "nonstrict")
       .set("spark.sql.orc.enabled", "true")
-      .set("spark.ui.showConsoleProgress", "false")
 
     if (!sparkConf.contains("spark.master")) sparkConf.setMaster("local[*]")
 

@@ -3,8 +3,8 @@ package com.pixipanda.sqlautomation.config
 
 import java.io.File
 
-import com.pixipanda.sqlautomation.config.queryconfig.{LoadConfig, TransformConfig}
 import com.pixipanda.sqlautomation.config.save.SaveConfig
+import com.pixipanda.sqlautomation.config.queryconfig.{LoadConfig, TransformConfig}
 import com.typesafe.config.{Config, ConfigFactory}
 import org.apache.log4j.Logger
 
@@ -14,36 +14,37 @@ object ConfigRegistry {
 
   val logger: Logger = Logger.getLogger(getClass.getName)
 
-  var _env: String = _
-
-  def apply(env: String): Unit = _env = env
-
+  private var _env: String = _
 
   def setEnv(env: String): Unit = _env = env
 
   def getEnv: String = _env
 
-  def config(file:String = null): Config = {
-    if(null != file)
+  private  var _config: Config = _
+
+  def getConfig:Config = _config
+
+  def parseConfig(file:String = null): Unit = {
+    _config =  if (null != file) {
       ConfigFactory.parseFile(new File(file))
+    }
     else
-    ConfigFactory.load()
+      ConfigFactory.load()
   }
 
-
-  lazy val sqlAutomate: SQLAutomate = SQLAutomate.parseSQLAutomate(config())
+  lazy val sqlAutomate: SQLAutomate = SQLAutomate.parseSQLAutomate(_config)
 
 
   def debugTransformConfig(transformConfig: TransformConfig): Unit = {
     logger.info("order: " + transformConfig.order)
-    logger.info("queryName: " + transformConfig.queryName)
-    logger.info("viewName: " + transformConfig.viewName)
+    logger.info("queryName: " + transformConfig.query)
+    logger.info("viewName: " + transformConfig.query)
   }
 
 
   def debugLoadConfig(loadConfig: LoadConfig): Unit = {
     logger.info("order: " + loadConfig.order)
-    logger.info("queryName: " + loadConfig.queryName)
+    logger.info("queryName: " + loadConfig.query)
     debugSaveConfig(loadConfig.save)
   }
 
