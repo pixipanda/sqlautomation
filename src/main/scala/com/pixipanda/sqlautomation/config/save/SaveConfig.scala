@@ -27,7 +27,7 @@ object SaveConfig {
 
   private def parseFormat(config: Config): Option[String] = {
 
-    if(config.hasPath("msckRepair")) Some(config.getString("format")) else None
+    if(config.hasPath("format")) Some(config.getString("format")) else None
   }
 
   private def getOptions(config: Config): Map[String, String] = {

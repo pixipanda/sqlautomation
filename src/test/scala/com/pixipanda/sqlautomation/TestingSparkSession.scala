@@ -37,6 +37,8 @@ object TestingSparkSession {
     configTestLog4j("OFF", "OFF")
     SparkSession
       .builder()
+      .config("spark.sql.warehouse.dir", "/tmp/hive/warehouse")
+      .config("spark.sql.catalogImplementation","hive")
       .config("spark.executor.memory", "512mb")
       .config("spark.ui.showConsoleProgress", value = false)
       .master("local[2]")

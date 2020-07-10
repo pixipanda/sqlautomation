@@ -10,7 +10,6 @@ object Main extends Spark {
     ConfigRegistry.setEnv(env)
     ConfigRegistry.parseConfig()
     val etlPipeline = ETLPipeline.buildPipeline(ConfigRegistry.sqlAutomate)
-    etlPipeline.getHandlers.toList.foreach(println)
     etlPipeline.process()
   }
 }
