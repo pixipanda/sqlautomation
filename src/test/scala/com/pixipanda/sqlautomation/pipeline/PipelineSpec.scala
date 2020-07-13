@@ -64,7 +64,7 @@ class PipelineSpec extends FunSpec with HDFSCluster with BeforeAndAfterAll {
       val hiveSaveConfig = SaveConfig("hive", Some(List("colA", "colB")), Some(true), "path1", hiveOrcOptions)
       val hiveLoadHandler = HiveLoadHandler("SELECT * FROM view11", hiveSaveConfig)
 
-      it("should create Spark Transform and Hive Load Handler with orc format") {
+      it("should create Spark Transform Handler and Hive Load Handler with orc format") {
 
         ConfigRegistry.setEnv("qa")
         ConfigRegistry.parseConfig("src/test/resources/only_hive_load.conf")
@@ -78,7 +78,7 @@ class PipelineSpec extends FunSpec with HDFSCluster with BeforeAndAfterAll {
 
     describe("Pipeline contains multiple handlers") {
 
-      it("should create multiple handlers") {
+      it("should build multiple handlers") {
         ConfigRegistry.setEnv("qa")
         ConfigRegistry.parseConfig("src/test/resources/hive_load.conf")
         val sqlAutomate = SQLAutomate.parseSQLAutomate(ConfigRegistry.getConfig)

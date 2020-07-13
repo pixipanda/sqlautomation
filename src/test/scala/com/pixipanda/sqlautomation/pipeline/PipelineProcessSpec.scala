@@ -1,21 +1,21 @@
 package com.pixipanda.sqlautomation.pipeline
 
 
-import com.pixipanda.sqlautomation.Spark
+import com.pixipanda.sqlautomation.TestingSparkSession
 import com.pixipanda.sqlautomation.config.{ConfigRegistry, SQLAutomate}
 import org.apache.spark.sql.DataFrame
 import org.scalatest.{BeforeAndAfterAll, FunSpec}
 
-class PipelineProcessSpec extends FunSpec with Spark with BeforeAndAfterAll{
+class PipelineProcessSpec extends FunSpec with TestingSparkSession with BeforeAndAfterAll{
 
   override protected def beforeAll(): Unit = {
     createTable()
     populateTables()
   }
 
-    def createTable():DataFrame = {
+  def createTable():DataFrame = {
 
-    spark.sql("CREATE DATABASE IF NOT EXISTS test_db1 LOCATION '/tmp/hive/warehouse/test_db1.db'")
+    spark.sql("CREATE DATABASE IF NOT EXISTS test_db1 LOCATION 'test_db1.db'")
 
 
     spark.sql("DROP TABLE IF EXISTS test_db1.employee")
@@ -27,7 +27,7 @@ class PipelineProcessSpec extends FunSpec with Spark with BeforeAndAfterAll{
       "emp_dept_id int," +
       "gender string," +
       "salary double)"
-     )
+    )
 
 
     spark.sql("DROP TABLE IF EXISTS test_db1.department")
@@ -41,7 +41,7 @@ class PipelineProcessSpec extends FunSpec with Spark with BeforeAndAfterAll{
       "emp_id int," +
       "name string," +
       "dept_name string)"
-      )
+    )
   }
 
 
@@ -76,15 +76,15 @@ class PipelineProcessSpec extends FunSpec with Spark with BeforeAndAfterAll{
 
     import spark.implicits._
 
-    it("should popluate test_db1.result table") {
+    it("should populate test_db1.result table") {
 
-      val empDep = Seq((1,"Smith","Finance"),
-        (2,"Rose","Marketing"),
-        (3,"Williams","Finance"),
-        (4,"Jones","Finance"),
-        (5,"Brown","IT")
+      val empDep = Seq((1, "Smith", "Finance"),
+        (2, "Rose", "Marketing"),
+        (3, "Williams", "Finance"),
+        (4, "Jones", "Finance"),
+        (5, "Brown", "IT")
       )
-      val empDepColumns = Seq("emp_id","name","dept_name")
+      val empDepColumns = Seq("emp_id", "name", "dept_name")
       val empDepDF = empDep.toDF(empDepColumns: _*)
       val expectedResult = empDepDF.collect().toList
 
@@ -94,6 +94,17 @@ class PipelineProcessSpec extends FunSpec with Spark with BeforeAndAfterAll{
       val etlPipeline = ETLPipeline.buildPipeline(sqlAutomate)
       etlPipeline.process()
       val sut = spark.sql("SELECT * FROM test_db1.result").collect().toList
+      assert(sut == expectedResult)
+    }
+
+    it("should create partition") {
+      val expectedResult = List("dept_name=Finance", "dept_name=IT", "dept_name=Marketing")
+      ConfigRegistry.setEnv("qa")
+      ConfigRegistry.parseConfig("src/test/resources/employee_department_partition.conf")
+      val sqlAutomate = SQLAutomate.parseSQLAutomate(ConfigRegistry.getConfig)
+      val etlPipeline = ETLPipeline.buildPipeline(sqlAutomate)
+      etlPipeline.process()
+      val sut = spark.sql("SHOW PARTITIONS test_db1.result").collect().toList.map(_.getAs[String]("partition"))
       assert(sut == expectedResult)
     }
   }
