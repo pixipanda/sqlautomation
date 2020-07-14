@@ -33,20 +33,10 @@ object TestingSparkSession {
     PropertyConfigurator.configure(pro)
   }
 
-  def isLinux: Boolean = {
-    "Linux" == System.getProperty("os.name")
-  }
-
-
-  def warehouseDir: String = {
-    if(isLinux) "/tmp/hive/warehouse" else "C:\\tmp\\hive\\warehouse"
-  }
-
   lazy val sparkSingleton: SparkSession = {
     configTestLog4j("OFF", "OFF")
     SparkSession
       .builder()
-      .config("spark.sql.warehouse.dir", warehouseDir)
       .config("spark.sql.catalogImplementation","hive")
       .config("spark.executor.memory", "512mb")
       .config("spark.ui.showConsoleProgress", value = false)
