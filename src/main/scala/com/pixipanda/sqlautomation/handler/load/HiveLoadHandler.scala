@@ -2,6 +2,7 @@ package com.pixipanda.sqlautomation.handler.load
 
 import com.pixipanda.sqlautomation.config.save.SaveConfig
 import com.pixipanda.sqlautomation.Spark
+import org.apache.spark.sql.functions.col
 
 case class HiveLoadHandler(query: String, saveConfig: SaveConfig) extends LoadHandler(query, saveConfig) with Spark {
 
@@ -12,18 +13,19 @@ case class HiveLoadHandler(query: String, saveConfig: SaveConfig) extends LoadHa
     val table = saveConfig.options("table")
 
 
-    saveConfig.partition match {
+    saveConfig.repartition match {
       case Some(columns) =>
-        df.write
+        df.repartition(columns.map(col): _*)
+          .write
           .format(saveConfig.options("format"))
           .mode(saveConfig.options("mode"))
           .partitionBy(columns: _*)
-          .saveAsTable(s"$db.$table")
+          .insertInto(s"$db.$table")
       case None =>
         df.write
           .format(saveConfig.options("format"))
           .mode(saveConfig.options("mode"))
-          .saveAsTable(s"$db.$table")
+          .insertInto(s"$db.$table")
     }
   }
 }

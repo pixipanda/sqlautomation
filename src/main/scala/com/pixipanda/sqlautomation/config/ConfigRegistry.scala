@@ -52,7 +52,7 @@ object ConfigRegistry {
   def debugSaveConfig(save: SaveConfig): Unit = {
 
     logger.info("sourceType: " + save.sourceType)
-    logger.info("partition: " + save.partition)
+    logger.info("repartition: " + save.repartition)
     logger.info("options: " + save.options)
   }
 
