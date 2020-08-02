@@ -53,7 +53,7 @@ object ConfigRegistry {
 
     logger.info("sourceType: " + save.sourceType)
     logger.info("partition: " + save.partition)
-    logger.info("MSCKRepair: " + save.MSCKRepair)
+    logger.info("options: " + save.options)
   }
 
 

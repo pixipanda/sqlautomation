@@ -89,7 +89,7 @@ class PipelineProcessSpec extends FunSpec with TestingSparkSession with BeforeAn
       val expectedResult = empDepDF.collect().toList
 
       ConfigRegistry.setEnv("qa")
-      ConfigRegistry.parseConfig("src/test/resources/employee_department.conf")
+      ConfigRegistry.parseConfig("src/test/resources/job1/job1.conf")
       val sqlAutomate = SQLAutomate.parseSQLAutomate(ConfigRegistry.getConfig)
       val etlPipeline = ETLPipeline.buildPipeline(sqlAutomate)
       etlPipeline.process()
@@ -100,7 +100,7 @@ class PipelineProcessSpec extends FunSpec with TestingSparkSession with BeforeAn
     it("should create partition") {
       val expectedResult = List("dept_name=Finance", "dept_name=IT", "dept_name=Marketing")
       ConfigRegistry.setEnv("qa")
-      ConfigRegistry.parseConfig("src/test/resources/employee_department_partition.conf")
+      ConfigRegistry.parseConfig("src/test/resources/job2/job2.conf")
       val sqlAutomate = SQLAutomate.parseSQLAutomate(ConfigRegistry.getConfig)
       val etlPipeline = ETLPipeline.buildPipeline(sqlAutomate)
       etlPipeline.process()

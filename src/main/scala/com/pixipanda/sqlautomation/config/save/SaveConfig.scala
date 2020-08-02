@@ -1,16 +1,15 @@
 package com.pixipanda.sqlautomation.config.save
 
+import com.pixipanda.sqlautomation.config.Options
 import com.pixipanda.sqlautomation.config.jdbc.JdbcConfig
 import com.typesafe.config.Config
 
 import scala.collection.JavaConverters._
-import scala.collection.mutable
+
 
 case class SaveConfig(
   sourceType: String,
   partition: Option[Seq[String]],
-  MSCKRepair: Option[Boolean],
-  path: String,
   options: Map[String, String]
 )
 
@@ -20,41 +19,15 @@ object SaveConfig {
     if(config.hasPath("partition")) Some(config.getStringList("partition").asScala.toList) else None
   }
 
-
-  private def parserMSCKRepair(config: Config): Option[Boolean] = {
-    if(config.hasPath("msckRepair")) Some(config.getBoolean("msckRepair")) else None
-  }
-
-  private def parseFormat(config: Config): Option[String] = {
-
-    if(config.hasPath("format")) Some(config.getString("format")) else None
-  }
-
-  private def getOptions(config: Config): Map[String, String] = {
-
-    val options = mutable.Map[String, String]()
-
-    val sourceType =  config.getString("sourceType")
-    val jdbcOptions = JdbcConfig.getJdbcAsMap(sourceType)
-
-    options.put("db", config.getString("db"))
-    options.put("table", config.getString("table"))
-    parseFormat(config).foreach(options.put("format", _))
-    options.put("mode", config.getString("mode"))
-
-    options.toMap ++ jdbcOptions
-  }
-
-
   def parseSaveConfig(config: Config): SaveConfig = {
 
     val saveConfig = config.getConfig("save")
     val sourceType =  saveConfig.getString("sourceType")
     val partition = parserPartition(saveConfig)
-    val msckRepair = parserMSCKRepair(saveConfig)
-    val path = saveConfig.getString("path")
-    val options = getOptions(saveConfig)
+    val optionsConfig = saveConfig.getConfig("options")
+    val options = Options.parse(optionsConfig)
+    val jdbcOptions = JdbcConfig.getJdbcAsMap(sourceType)
+    SaveConfig(sourceType, partition, options ++ jdbcOptions)
 
-    SaveConfig(sourceType, partition, msckRepair, path, options)
   }
 }

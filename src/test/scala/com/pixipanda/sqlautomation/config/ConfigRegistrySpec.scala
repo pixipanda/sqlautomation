@@ -21,7 +21,7 @@ class ConfigRegistrySpec extends FunSpec {
 
 
     it("should correctly parse simple hive conf file") {
-      val hiveSaveConfig = SaveConfig("hive", Some(List("colA", "colB")), Some(true), "path1", hiveOrcOptions)
+      val hiveSaveConfig = SaveConfig("hive", Some(List("colA", "colB")), hiveOrcOptions)
       val queryConfig4 = LoadConfig(2, "SELECT * FROM view11 join view12 join view21", hiveSaveConfig, ETL.LOAD)
       val sqlConfig2 = SQLConfig(2, "sqlFile2.conf", List(queryConfig3, queryConfig4))
       val hiveExpectedResult = SQLAutomate(List(sqlConfig1, sqlConfig2))
@@ -35,7 +35,7 @@ class ConfigRegistrySpec extends FunSpec {
     it("should correctly parse simple teradata conf file with Jdbc") {
       val teraDataOptions = Map("db" -> "db1", "table" -> "table1", "mode" -> "overwrite")
       val teraDataJdbcOptions = Map("driver" -> "com.teradata.jdbc.TeraDriver", "url" -> "teradata/qa/url", "username" -> "teradata", "password" -> "")
-      val teraDataSaveConfig = SaveConfig("teradata", None, None, "path1", teraDataOptions ++ teraDataJdbcOptions)
+      val teraDataSaveConfig = SaveConfig("teradata", None, teraDataOptions ++ teraDataJdbcOptions)
       val queryConfig4 = LoadConfig(2, "SELECT * FROM view11 join view12 join view21", teraDataSaveConfig, ETL.LOAD)
       val sqlConfig2 = SQLConfig(2, "sqlFile2.conf", List(queryConfig3, queryConfig4))
       val terDataExpectedResult = SQLAutomate(List(sqlConfig1, sqlConfig2))

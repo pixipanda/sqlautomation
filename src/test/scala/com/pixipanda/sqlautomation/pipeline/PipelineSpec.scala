@@ -54,14 +54,14 @@ class PipelineSpec extends FunSpec with HDFSCluster with BeforeAndAfterAll {
     val sparkTransformHandler21 = SparkTransformHandler("SELECT * FROM view11 join view12", "view21")
 
     val hiveOrcOptions = Map("db" -> "db1", "table" -> "table1", "format" -> "orc", "mode" -> "overwrite")
-    val hiveSaveConfig = SaveConfig("hive", Some(List("colA", "colB")), Some(true), "path1", hiveOrcOptions)
+    val hiveSaveConfig = SaveConfig("hive", Some(List("colA", "colB")), hiveOrcOptions)
     val hiveLoadHandler = HiveLoadHandler("SELECT * FROM view11 join view12 join view21", hiveSaveConfig)
 
 
     describe("Pipeline contains hive load handler") {
 
       val hiveOrcOptions = Map("db" -> "db1", "table" -> "table1", "format" -> "orc", "mode" -> "overwrite")
-      val hiveSaveConfig = SaveConfig("hive", Some(List("colA", "colB")), Some(true), "path1", hiveOrcOptions)
+      val hiveSaveConfig = SaveConfig("hive", Some(List("colA", "colB")), hiveOrcOptions)
       val hiveLoadHandler = HiveLoadHandler("SELECT * FROM view11", hiveSaveConfig)
 
       it("should create Spark Transform Handler and Hive Load Handler with orc format") {
