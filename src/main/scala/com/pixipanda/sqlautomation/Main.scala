@@ -1,7 +1,7 @@
 package com.pixipanda.sqlautomation
 
 import com.pixipanda.sqlautomation.config.ConfigRegistry
-import com.pixipanda.sqlautomation.pipeline.ETLPipeline
+import com.pixipanda.sqlautomation.pipeline.Pipeline
 
 
 object Main extends Spark {
@@ -9,7 +9,7 @@ object Main extends Spark {
     val env = args(0)
     ConfigRegistry.setEnv(env)
     ConfigRegistry.parseConfig()
-    val etlPipeline = ETLPipeline.buildPipeline(ConfigRegistry.sqlAutomate)
-    etlPipeline.process()
+    val pipeline = Pipeline.buildPipeline(ConfigRegistry.appConfig)
+    pipeline.process()
   }
 }

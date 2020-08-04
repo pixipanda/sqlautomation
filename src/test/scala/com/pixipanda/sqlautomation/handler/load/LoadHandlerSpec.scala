@@ -1,9 +1,9 @@
+/*
 package com.pixipanda.sqlautomation.handler.load
 
 import com.pixipanda.sqlautomation.config.queryconfig.LoadConfig
 import com.pixipanda.sqlautomation.config.save.SaveConfig
 import com.pixipanda.sqlautomation.constants.ETL
-import com.pixipanda.sqlautomation.factory.LoadHandlerFactory
 import com.pixipanda.sqlautomation.handler.load.jdbc.TeradataLoadHandler
 import org.scalatest.FunSpec
 
@@ -47,3 +47,4 @@ class LoadHandlerSpec extends FunSpec{
     }
   }
 }
+*/

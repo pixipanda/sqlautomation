@@ -1,3 +1,4 @@
+/*
 package com.pixipanda.sqlautomation.handler.load.jdbc
 
 import com.pixipanda.sqlautomation.config.save.SaveConfig
@@ -8,3 +9,4 @@ case class DB2LoadHandler(query: String, saveConfig: SaveConfig) extends JdbcLoa
   override def process(): Unit = super.process()
   override def decryptPassword: String = super.decryptPassword
 }
+*/

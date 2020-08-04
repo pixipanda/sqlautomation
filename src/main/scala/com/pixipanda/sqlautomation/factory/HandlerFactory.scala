@@ -1,23 +1,25 @@
 package com.pixipanda.sqlautomation.factory
 
-import com.pixipanda.sqlautomation.config.queryconfig.QueryConfig
-import com.pixipanda.sqlautomation.handler.Handler
-import com.pixipanda.sqlautomation.constants.ETL
+import com.pixipanda.sqlautomation.config.extract.ExtractConfig
+import com.pixipanda.sqlautomation.config.load.LoadConfig
+import com.pixipanda.sqlautomation.config.transform.SQLTransformConfig
+import com.pixipanda.sqlautomation.handler.extract.ExtractHandler
+import com.pixipanda.sqlautomation.handler.load.LoadHandler
+import com.pixipanda.sqlautomation.handler.transform.SQLTransformHandler
 
+object HandlerFactory {
 
-trait HandlerFactory {
-
-  def getHandler(queryConfig: QueryConfig): Handler
-}
-
-object HandlerFactory{
-
-  def apply(etlType: String): HandlerFactory = {
-
-    etlType match {
-      case ETL.LOAD => LoadHandlerFactory()
-      case ETL.TRANSFORM  => TransformHandlerFactory()
-    }
+  def getHandler(extractConfig: ExtractConfig): ExtractHandler = {
+    val readers = extractConfig.sourceConfigs.map(ReaderFactory.getReader)
+    ExtractHandler(readers)
   }
 
+  def getHandler(sqlTransformConfig: SQLTransformConfig): SQLTransformHandler = {
+    SQLTransformHandler(sqlTransformConfig.query, sqlTransformConfig.viewName)
+  }
+
+  def getHandler(loadConfig: LoadConfig): LoadHandler = {
+    val writers = loadConfig.sinkConfigs.map(WriterFactory.getWriter)
+    LoadHandler(writers)
+  }
 }

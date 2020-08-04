@@ -1,8 +1,8 @@
+/*
 package com.pixipanda.sqlautomation.handler.transform
 
 import com.pixipanda.sqlautomation.config.queryconfig.TransformConfig
 import com.pixipanda.sqlautomation.constants.ETL
-import com.pixipanda.sqlautomation.factory.TransformHandlerFactory
 import com.typesafe.config.ConfigFactory
 import org.scalatest.FunSpec
 
@@ -29,3 +29,4 @@ class TransformHandlerSpec extends FunSpec{
     }
   }
 }
+*/

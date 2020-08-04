@@ -1,3 +1,4 @@
+/*
 package com.pixipanda.sqlautomation.handler.load.jdbc
 
 import com.pixipanda.sqlautomation.config.save.SaveConfig
@@ -14,3 +15,4 @@ abstract class JdbcLoadHandler(query: String, saveConfig:SaveConfig) extends Loa
     ""
   }
 }
+*/
