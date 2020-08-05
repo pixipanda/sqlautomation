@@ -9,6 +9,7 @@ object Main extends Spark {
     val env = args(0)
     ConfigRegistry.setEnv(env)
     ConfigRegistry.parseConfig()
+    ConfigRegistry.debugAppConfig()
     val pipeline = Pipeline.buildPipeline(ConfigRegistry.appConfig)
     pipeline.process()
   }

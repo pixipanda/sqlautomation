@@ -3,9 +3,7 @@ package com.pixipanda.sqlautomation.factory
 import com.pixipanda.sqlautomation.config.ConfigObject
 import com.pixipanda.sqlautomation.config.extract.ExtractConfig
 import com.pixipanda.sqlautomation.config.load.LoadConfig
-import com.pixipanda.sqlautomation.config.transform.SQLConfig
-import com.pixipanda.sqlautomation.container.DContainer
-import com.pixipanda.sqlautomation.handler.Handler
+import com.pixipanda.sqlautomation.config.transform.{SQLConfig, TransformConfig}
 import com.pixipanda.sqlautomation.handler.extract.ExtractHandler
 import com.pixipanda.sqlautomation.handler.load.LoadHandler
 import com.pixipanda.sqlautomation.handler.transform.SQLTransformHandler
@@ -13,8 +11,6 @@ import com.pixipanda.sqlautomation.reader.file.FileReader
 import com.pixipanda.sqlautomation.writer.HiveWriter
 import com.pixipanda.sqlautomation.writer.file.FileWriter
 import org.scalatest.FunSpec
-
-import scala.collection.mutable
 
 class HandlerFactorySpec extends  FunSpec{
 
@@ -45,18 +41,20 @@ class HandlerFactorySpec extends  FunSpec{
       }
     }
 
-    describe("Get TransformHandler Handler") {
+    describe("Get TransformHandler Handlers") {
 
       val sqlTransformConfig1 = ConfigObject.job1sqlTransformConfig1
       val sqlTransformConfig2 = ConfigObject.job1sqlTransformConfig2
-      val sqlConfig = SQLConfig(1, "sqlFile1.conf", List(sqlTransformConfig1, sqlTransformConfig2))
 
       it("should create sql transform handler") {
 
         val query = sqlTransformConfig1.query
         val viewName = sqlTransformConfig1.viewName
-        val expected = SQLTransformHandler(query, viewName)
-        val sut = HandlerFactory.getHandler(sqlTransformConfig1)
+        val expected = List(SQLTransformHandler(query, viewName))
+
+        val sqlConfig = SQLConfig(1, "sqlFile1.conf", List(sqlTransformConfig1))
+        val transformConfig = TransformConfig(List(sqlConfig))
+        val sut = HandlerFactory.getHandler(transformConfig)
         assert(sut == expected)
       }
 
@@ -65,12 +63,9 @@ class HandlerFactorySpec extends  FunSpec{
         val sqlTransformHandler1 = SQLTransformHandler(sqlTransformConfig1.query, sqlTransformConfig1.viewName)
         val sqlTransformHandler2 = SQLTransformHandler(sqlTransformConfig2.query, sqlTransformConfig2.viewName)
         val expected = List(sqlTransformHandler1, sqlTransformHandler2)
-        val handlers = mutable.ListBuffer[Handler[DContainer, DContainer]]()
-        sqlConfig.sqlTransformConfigs.foreach(sqlTransformConfig => {
-          val handler = HandlerFactory.getHandler(sqlTransformConfig)
-          handlers.append(handler)
-        })
-        assert(handlers.toList == expected)
+
+        val sut = HandlerFactory.getHandler(ConfigObject.job1TransformConfig)
+        assert(sut == expected)
       }
     }
 

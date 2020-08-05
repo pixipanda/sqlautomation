@@ -1,7 +1,7 @@
 package com.pixipanda.sqlautomation.reader.file
 
 import com.pixipanda.sqlautomation.config.SourceConfig
-import com.pixipanda.sqlautomation.utils.DataObjects
+import com.pixipanda.sqlautomation.utils.TestUtils
 import org.scalatest.FunSpec
 
 class CsvReaderSpec extends FunSpec{
@@ -11,7 +11,7 @@ class CsvReaderSpec extends FunSpec{
     describe("Functionality") {
 
       val csvOptions = Map(
-        "path" -> "/tmp/csvfiles/file1.csv",
+        "path" -> "/tmp/csvfiles/read/employee.csv",
         "format" -> "csv",
         "header" -> "true",
         "inferSchema" -> "true"
@@ -20,21 +20,13 @@ class CsvReaderSpec extends FunSpec{
 
       it("should read csv file1") {
 
-        val expected = DataObjects.employee
+        val expected = TestUtils.employees
+
         val csvReader = FileReader(csvSourceConfig)
         val container = csvReader.read
-        val sut = container.dfs.head
-          .collect
-          .toList
-          .map(row => {
-            (
-              row.getAs[Int]("emp_id"),
-              row.getAs[String]("name"),
-              row.getAs[String]("gender"),
-              row.getAs[Int]("dept_id")
-            )
-          })
-         assert(sut.sortBy(_._1) == expected)
+
+        val sut = TestUtils.employeeDFToSeq(container.dfs.head)
+         assert(sut == expected)
       }
     }
   }

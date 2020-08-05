@@ -6,7 +6,7 @@ import scala.collection.mutable
 
 class DContainer() {
 
- var keyValue: Map[String, DataFrame] =  Map()
+ var keyValue: Map[String, DataFrame] =  Map().empty
  var dfs: Seq[DataFrame] = List()
 
 
@@ -79,6 +79,6 @@ object DContainer {
 
 
   def emptyContainer(): DContainer = {
-    apply()
+    new DContainer
   }
 }
