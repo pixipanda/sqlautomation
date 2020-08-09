@@ -15,7 +15,7 @@ class ContainerSpec extends FunSpec with TestingSparkSession{
       val viewName2 = "view2"
 
 
-      it("shoule create empty container") {
+      it("should create empty container") {
 
         val sut = DContainer()
         assert(sut.dfs.isEmpty)

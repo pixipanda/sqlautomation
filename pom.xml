@@ -58,14 +58,20 @@
       <groupId>org.apache.spark</groupId>
       <artifactId>spark-sql_2.11</artifactId>
       <version>${spark.version}</version>
-      <!--<scope>provided</scope>-->
+      <scope>provided</scope>
     </dependency>
     <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-hive -->
     <dependency>
       <groupId>org.apache.spark</groupId>
       <artifactId>spark-hive_2.11</artifactId>
       <version>${spark.version}</version>
-      <!--<scope>provided</scope>-->
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.pixipanda</groupId>
+      <artifactId>sftp-client</artifactId>
+      <version>1.0</version>
     </dependency>
 
     <dependency>
@@ -106,7 +112,7 @@
   <build>
     <sourceDirectory>src/main/scala</sourceDirectory>
     <testSourceDirectory>src/test/scala</testSourceDirectory>
-    <finalName>quality_check_v2</finalName>
+    <finalName>sqlautomation-v2</finalName>
     <plugins>
       <plugin>
         <groupId>org.scala-tools</groupId>

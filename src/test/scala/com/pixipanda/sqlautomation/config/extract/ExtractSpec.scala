@@ -1,6 +1,7 @@
 package com.pixipanda.sqlautomation.config.extract
 
-import com.pixipanda.sqlautomation.config.{ConfigObject, SourceConfig}
+import com.pixipanda.sqlautomation.config.ConfigUtils
+import com.pixipanda.sqlautomation.config.etl.extract.ExtractConfig
 import com.typesafe.config.ConfigFactory
 import org.scalatest.FunSpec
 
@@ -8,8 +9,8 @@ class ExtractSpec extends FunSpec {
 
   describe("Simple Extract Parsing") {
 
-    val ftpSourceConfig = ConfigObject.ftpSourceConfig
-    val csvSourceConfig = ConfigObject.csvSourceConfig
+    val ftpSourceConfig = ConfigUtils.ftpSourceConfig
+    val csvSourceConfig = ConfigUtils.csvSourceConfig
 
     it("should parse simple extract config string") {
 
@@ -20,10 +21,12 @@ class ExtractSpec extends FunSpec {
           |    {
           |      sourceType = "ftpServer"
           |      options {
-          |        server = "abc.com"
-          |        username = "user"
-          |        password = ftpPassword
-          |        privateKey = privateKey
+          |        host = "pixipanda"
+          |        username = "hduser"
+          |        privateKey = "C:\\workspace\\Engineering\\passwordless\\private_key.ppk"
+          |        tempLocation = "C:\\tmp\\local_tmp"
+          |        hdfsTempLocation = "/tmp/hdfs_tmp"
+          |        path = "/tmp/csvfiles/input/employee.csv"
           |      }
           |    }
           |  ]
@@ -46,18 +49,20 @@ class ExtractSpec extends FunSpec {
           |    {
           |      sourceType = "ftpServer"
           |      options {
-          |        server = "abc.com"
-          |        username = "user"
-          |        password = ftpPassword
-          |        privateKey = privateKey
+          |        host = "pixipanda"
+          |        username = "hduser"
+          |        privateKey = "C:\\workspace\\Engineering\\passwordless\\private_key.ppk"
+          |        tempLocation = "C:\\tmp\\local_tmp"
+          |        hdfsTempLocation = "/tmp/hdfs_tmp"
+          |        path = "/tmp/csvfiles/input/employee.csv"
           |      }
           |    },
           |    {
           |      sourceType = "csv"
           |      options {
-          |        path = "/path/to/abc.csv"
+          |        path = "/tmp/csvfiles/input/employee.csv"
           |        format = "csv"
-          |        delimiter = "|"
+          |        inferSchema = "true"
           |        header = "true"
           |      }
           |    }

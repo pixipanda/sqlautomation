@@ -1,7 +1,9 @@
 package com.pixipanda.sqlautomation.utils
 
 import com.pixipanda.sqlautomation.TestingSparkSession
-import com.pixipanda.sqlautomation.config.{ConfigRegistry, SourceConfig}
+import com.pixipanda.sqlautomation.config.ConfigRegistry
+import com.pixipanda.sqlautomation.config.common.SourceConfig
+import com.pixipanda.sqlautomation.container.DContainer
 import com.pixipanda.sqlautomation.pipeline.Pipeline
 import com.pixipanda.sqlautomation.reader.file.FileReader
 import org.apache.spark.sql.DataFrame
@@ -17,18 +19,6 @@ object TestUtils extends FunSpec with TestingSparkSession{
                       gender: String,
                       salary: Double
                      )
-
-
-/*  val empColumns: Seq[String] = Seq("emp_id","name","superior_emp_id","year_joined",
-    "emp_dept_id","gender","salary")
-
-  val employee: Seq[(Int, String, Int, String, Int, String, Double)] = List((1,"Smith",-1,"2018",10,"M",3000.0),
-    (2,"Rose",1,"2010",20,"M",4000.0),
-    (3,"Williams",1,"2010",10,"M",1000.0),
-    (4,"Jones",2,"2005",10,"F",2000.0),
-    (5,"Brown",2,"2010",40,"M",-1.0)
-  )*/
-
   val employees: Seq[Employee] = Seq(
     Employee(1,"Smith",-1,10,"M",3000.0),
     Employee(2,"Rose",1,20,"M",4000.0),
@@ -43,32 +33,53 @@ object TestUtils extends FunSpec with TestingSparkSession{
   }
 
 
-  def buildPipeline(configFile: String): Pipeline[Unit, Unit] = {
+  case class Department(dept_name: String, dept_id: Int)
+  val dept: Seq[Department] = Seq(Department("Finance",10),
+    Department("Marketing",20),
+    Department("Sales",30),
+    Department("IT",40)
+  )
+  def deptDF: DataFrame = {
+    import  spark.implicits._
+    dept.toDF()
+  }
 
+
+  case class EmpDept(emp_id: Int, name: String, dept_name: String)
+  val empDept: Seq[EmpDept] = Seq(
+    EmpDept(1, "Smith", "Finance"),
+    EmpDept(2, "Rose", "Marketing"),
+    EmpDept(3, "Williams", "Finance"),
+    EmpDept(4, "Jones", "Finance"),
+    EmpDept(5, "Brown", "IT")
+  )
+  def empDeptDF: DataFrame = {
+    import spark.implicits._
+    dept.toDF()
+  }
+
+  def buildPipeline(configFile: String): Pipeline[Unit, _ >: Unit with DContainer] = {
     ConfigRegistry.setEnv("qa")
     ConfigRegistry.parseConfig(configFile)
     ConfigRegistry.debugAppConfig()
     Pipeline.buildPipeline(ConfigRegistry.appConfig)
-
   }
 
   def runPipeline(configFile: String): Unit = {
-
     buildPipeline(configFile).process()
   }
 
 
   def employeeDFToSeq(df:DataFrame): Seq[Employee] = {
-
     df.collect
       .toList
       .map(row => {
-          val emp_id = row.getAs[Int]("emp_id")
-          val name = row.getAs[String]("name")
-          val superior_emp_id = row.getAs[Int]("superior_emp_id")
-          val emp_dept_id = row.getAs[Int]("emp_dept_id")
-          val gender = row.getAs[String]("gender")
-          val salary = row.getAs[Double]("salary")
+        val emp_id = row.getAs[Int]("emp_id")
+        val name = row.getAs[String]("name")
+        val superior_emp_id = row.getAs[Int]("superior_emp_id")
+        val emp_dept_id = row.getAs[Int]("emp_dept_id")
+        val gender = row.getAs[String]("gender")
+        val salary = row.getAs[Double]("salary")
         Employee(emp_id, name, superior_emp_id, emp_dept_id, gender, salary)
       })
   }
@@ -77,7 +88,6 @@ object TestUtils extends FunSpec with TestingSparkSession{
   def readEmployee(fileSourceConfig: SourceConfig): Seq[Employee] = {
     val fileReader = FileReader(fileSourceConfig)
     val readContainer = fileReader.read
-
     val df = readContainer.dfs.head
     employeeDFToSeq(df)
   }
@@ -86,7 +96,6 @@ object TestUtils extends FunSpec with TestingSparkSession{
   def createEmployeeTable(): DataFrame = {
 
     spark.sql("CREATE DATABASE IF NOT EXISTS test_db1 LOCATION 'test_db1.db'")
-
 
     spark.sql("DROP TABLE IF EXISTS test_db1.employee")
     spark.sql("CREATE TABLE IF NOT EXISTS test_db1.employee(" +
@@ -101,19 +110,43 @@ object TestUtils extends FunSpec with TestingSparkSession{
     )
   }
 
-  def createDepartmentTable():DataFrame = {
-
+   def createDeptTable():DataFrame = {
     spark.sql("DROP TABLE IF EXISTS test_db1.department")
     spark.sql("CREATE TABLE IF NOT EXISTS test_db1.department(" +
-      "dept_name int," +
-      "dept_id int)")
+      "dept_name String," +
+      "dept_id int" +
+      ")" +
+      "STORED AS ORC"
+    )
+  }
 
-
-    spark.sql("DROP TABLE IF EXISTS test_db1.result")
-    spark.sql("CREATE TABLE IF NOT EXISTS test_db1.result(" +
+  def createEmpJoinDeptTable(): DataFrame = {
+    spark.sql("DROP TABLE IF EXISTS test_db1.empDept")
+    spark.sql("CREATE TABLE IF NOT EXISTS test_db1.empDept(" +
       "emp_id int," +
       "name string," +
-      "dept_name string)"
+      "dept_name string" +
+      ")" +
+      "STORED AS ORC"
     )
+  }
+
+  def createEmpJoinDeptPartitionTable(): DataFrame = {
+    spark.sql("DROP TABLE IF EXISTS test_db1.empDeptPartition")
+    spark.sql("CREATE TABLE IF NOT EXISTS test_db1.empDeptPartition(" +
+      "emp_id int," +
+      "name string" +
+      ")" +
+      "PARTITIONED BY (dept_name string)" +
+      "STORED AS ORC"
+    )
+  }
+
+  def populateTable(db: String, table: String, df: DataFrame): Unit = {
+    df.coalesce(1)
+      .write
+      .format("orc")
+      .mode("overwrite")
+      .insertInto(s"$db.$table")
   }
 }

@@ -1,7 +1,7 @@
 package com.pixipanda.sqlautomation.writer
 
 import com.pixipanda.sqlautomation.Spark
-import com.pixipanda.sqlautomation.config.SinkConfig
+import com.pixipanda.sqlautomation.config.common.SinkConfig
 import com.pixipanda.sqlautomation.container.DContainer
 import org.apache.log4j.Logger
 import org.apache.spark.sql.functions.col
@@ -18,20 +18,15 @@ case class HiveWriter(sinkConfig: SinkConfig) extends Writer with Spark{
 
     logger.info(s"Saving data to ${sinkConfig.sinkType} dbName: $db tableName: $table")
 
-    val df = container.dfs.head
-
-    sinkConfig.repartition match {
+    val df = sinkConfig.repartition match {
       case Some(columns) =>
-        df.repartition(columns.map(col): _*)
-          .write
-          .format(sinkConfig.options("format"))
-          .mode(sinkConfig.options("mode"))
-          .insertInto(s"$db.$table")
+        container.dfs.head.repartition(columns.map(col): _*)
       case None =>
-        df.write
-          .format(sinkConfig.options("format"))
-          .mode(sinkConfig.options("mode"))
-          .insertInto(s"$db.$table")
+        container.dfs.head
     }
+    df.write
+      .format(sinkConfig.options("format"))
+      .mode(sinkConfig.options("mode"))
+      .insertInto(s"$db.$table")
   }
 }

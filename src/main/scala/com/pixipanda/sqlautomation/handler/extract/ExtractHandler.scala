@@ -4,7 +4,6 @@ import com.pixipanda.sqlautomation.container.DContainer
 import com.pixipanda.sqlautomation.handler.Handler
 import com.pixipanda.sqlautomation.reader.Reader
 
-
 case class ExtractHandler(readers: Seq[Reader])  extends Handler[Unit, DContainer] {
 
   override def process(input: Unit): DContainer = {

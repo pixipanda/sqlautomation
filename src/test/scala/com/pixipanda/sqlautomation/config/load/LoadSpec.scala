@@ -1,6 +1,7 @@
 package com.pixipanda.sqlautomation.config.load
 
-import com.pixipanda.sqlautomation.config.{ConfigObject, SinkConfig}
+import com.pixipanda.sqlautomation.config.ConfigUtils
+import com.pixipanda.sqlautomation.config.etl.load.LoadConfig
 import com.typesafe.config.ConfigFactory
 import org.scalatest.FunSpec
 
@@ -8,10 +9,10 @@ class LoadSpec extends FunSpec {
 
   describe("Simple Load Parsing") {
 
-    val hiveSinkConfig = ConfigObject.hiveSinkConfig
-    val csvSinkConfig = ConfigObject.csvSinkConfig
+    val hiveSinkConfig = ConfigUtils.hiveSinkConfig
+    val csvSinkConfig = ConfigUtils.csvSinkConfig
 
-   it("should parse simple load config string") {
+    it("should parse simple load config string") {
 
       val configString =
         """
@@ -20,8 +21,8 @@ class LoadSpec extends FunSpec {
           |    {
           |      sinkType = "hive"
           |      options {
-          |        db = "hiveDb1"
-          |        table = "hiveTable1"
+          |        db = "test_db1"
+          |        table = "employee"
           |        format = "orc"
           |        mode = "overwrite"
           |      }
@@ -30,7 +31,7 @@ class LoadSpec extends FunSpec {
           |}
         """.stripMargin
 
-      val expected = LoadConfig(List(hiveSinkConfig))
+      val expected = Some(LoadConfig(List(hiveSinkConfig)))
       val config = ConfigFactory.parseString(configString)
       val sut = LoadConfig.parse(config)
       assert(sut == expected)
@@ -46,8 +47,8 @@ class LoadSpec extends FunSpec {
           |    {
           |      sinkType = "hive"
           |      options {
-          |        db = "hiveDb1"
-          |        table = "hiveTable1"
+          |        db = "test_db1"
+          |        table = "employee"
           |        format = "orc"
           |        mode = "overwrite"
           |      }
@@ -55,17 +56,17 @@ class LoadSpec extends FunSpec {
           |    {
           |      sinkType = "csv"
           |      options {
-          |        path = "/path/to/abc.csv"
+          |        path = "/tmp/csvfiles/output"
           |        format = "csv"
-          |        delimiter = "|"
           |        header = "true"
+          |        mode = "overwrite"
           |      }
           |    }
           |  ]
           |}
         """.stripMargin
 
-      val expected = LoadConfig(List(hiveSinkConfig, csvSinkConfig))
+      val expected = Some(LoadConfig(List(hiveSinkConfig, csvSinkConfig)))
       val config = ConfigFactory.parseString(configString)
       val sut = LoadConfig.parse(config)
       assert(sut == expected)

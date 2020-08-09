@@ -1,5 +1,6 @@
 package com.pixipanda.sqlautomation.config
 
+import com.pixipanda.sqlautomation.config.common.Options
 import com.typesafe.config.ConfigFactory
 import org.scalatest.FunSpec
 
@@ -12,19 +13,13 @@ class OptionsSpec extends FunSpec{
       val configString =
         """
           |options {
-          |  db = "mysqlDb1"
-          |  table = "mysqlTable1"
-          |  username = "user"
-          |  password = mysqlPassword
+          |  db = "test_db1"
+          |  table = "employee"
+          |  format = "orc"
           |}
         """.stripMargin
 
-      val expected = Map(
-        "db" -> "mysqlDb1",
-        "table" -> "mysqlTable1",
-        "username" -> "user",
-        "password" -> "mysqlPassword"
-      )
+      val expected = ConfigUtils.hiveSourceOptions
 
       val config = ConfigFactory.parseString(configString)
       val optionConfig = config.getConfig("options")

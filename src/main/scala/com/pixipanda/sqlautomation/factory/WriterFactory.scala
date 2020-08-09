@@ -1,7 +1,7 @@
 package com.pixipanda.sqlautomation.factory
 
-import com.pixipanda.sqlautomation.config.SinkConfig
-import com.pixipanda.sqlautomation.constants.Source._
+import com.pixipanda.sqlautomation.config.common.SinkConfig
+import com.pixipanda.sqlautomation.constants.DataStores._
 import com.pixipanda.sqlautomation.writer.{HiveWriter, Writer}
 import com.pixipanda.sqlautomation.writer.file.FileWriter
 

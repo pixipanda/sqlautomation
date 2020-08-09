@@ -1,7 +1,7 @@
 package com.pixipanda.sqlautomation.pipeline
 
-
 import com.pixipanda.sqlautomation.config.AppConfig
+import com.pixipanda.sqlautomation.container.DContainer
 import com.pixipanda.sqlautomation.factory.HandlerFactory
 import com.pixipanda.sqlautomation.handler.Handler
 import com.pixipanda.sqlautomation.handler.extract.EmptyExtractHandler
@@ -28,7 +28,7 @@ object Pipeline {
 
   val logger: Logger = Logger.getLogger(getClass.getName)
 
-  def buildPipeline(appConfig: AppConfig):Pipeline[Unit, Unit] = {
+  def buildPipeline(appConfig: AppConfig): Pipeline[Unit, _ >: Unit with DContainer] = {
 
     logger.info("Building Pipeline")
 
@@ -36,22 +36,24 @@ object Pipeline {
       case Some(extractConfig) =>
         val extractHandler = HandlerFactory.getHandler(extractConfig)
         Pipeline(extractHandler)
-      case None => Pipeline(new EmptyExtractHandler())
+      case None => Pipeline(EmptyExtractHandler())
     }
-
 
     val transformPipeline = appConfig.transformConfig match {
       case Some(transformConfig) =>
         val transformHandlers = HandlerFactory.getHandler(transformConfig)
-         transformHandlers.foldLeft(extractPipeline)((pipelineAcc, handler) => {
-           pipelineAcc.addHandler(handler)
-         })
+        transformHandlers.foldLeft(extractPipeline)((pipelineAcc, handler) => {
+          pipelineAcc.addHandler(handler)
+        })
       case None => extractPipeline
     }
 
-
-    val loadHandler = HandlerFactory.getHandler(appConfig.loadConfig)
-    val loadPipeline = transformPipeline.addHandler(loadHandler)
+    val loadPipeline = appConfig.loadConfig match {
+      case Some(loadConfig) =>
+        val loadHandler = HandlerFactory.getHandler(loadConfig)
+        transformPipeline.addHandler(loadHandler)
+      case None => transformPipeline
+    }
 
     loadPipeline
 

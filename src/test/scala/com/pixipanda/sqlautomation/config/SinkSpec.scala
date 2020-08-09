@@ -1,5 +1,6 @@
 package com.pixipanda.sqlautomation.config
 
+import com.pixipanda.sqlautomation.config.common.SinkConfig
 import com.typesafe.config.ConfigFactory
 import org.scalatest.FunSpec
 
@@ -13,25 +14,19 @@ class SinkSpec extends FunSpec{
         """{
           |  sinkType = "hive"
           |  options {
-          |    db = "hiveDb1"
-          |    table = "hiveTable1"
+          |    db = "test_db1"
+          |    table = "employee"
           |    format = "orc"
           |    mode = "overwrite"
           |  }
           |}
         """.stripMargin
 
-      val hiveOptions = Map(
-        "db" -> "hiveDb1",
-        "table" -> "hiveTable1",
-        "format" -> "orc",
-        "mode" -> "overwrite"
-      )
-      val expectedResult = SinkConfig("hive", None, hiveOptions)
+      val expected = ConfigUtils.hiveSinkConfig
 
       val config = ConfigFactory.parseString(configString)
       val sut = SinkConfig.parse(config)
-      assert(sut == expectedResult)
+      assert(sut == expected)
     }
   }
 }

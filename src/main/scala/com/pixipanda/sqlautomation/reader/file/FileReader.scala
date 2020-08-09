@@ -1,13 +1,13 @@
 package com.pixipanda.sqlautomation.reader.file
 
 import com.pixipanda.sqlautomation.Spark
-import com.pixipanda.sqlautomation.config.SourceConfig
+import com.pixipanda.sqlautomation.config.common.SourceConfig
 import com.pixipanda.sqlautomation.container.DContainer
 import com.pixipanda.sqlautomation.reader.Reader
 import org.apache.log4j.Logger
 
 /*
- FileReader class is uused to read data from different files sources like CSV, XML, JSON, ORC, PARQUET, FTPSERVER etc
+ FileReader class is used to read data from different files sources like CSV, XML, JSON, ORC, PARQUET, FTPSERVER etc
 
 */
 case class FileReader(sourceConfig: SourceConfig) extends Reader with Spark{

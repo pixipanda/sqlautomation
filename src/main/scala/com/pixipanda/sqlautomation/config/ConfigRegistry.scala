@@ -24,14 +24,15 @@ object ConfigRegistry {
 
   def parseConfig(file:String = null): Unit = {
     _config =  if (null != file) {
-      ConfigFactory.parseFile(new File(file))
+      ConfigFactory.parseFile(new File(file)).resolve()
     }
     else
-      ConfigFactory.load()
+      ConfigFactory.load().resolve()
   }
 
   lazy val appConfig: AppConfig = AppConfig.parse(_config)
 
+  def clear(): Unit = _config = null
 
   def debugAppConfig(): Unit = {
     logger.debug(appConfig.extractConfig)

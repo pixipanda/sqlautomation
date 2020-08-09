@@ -1,6 +1,5 @@
 package com.pixipanda.sqlautomation.handler.load
 
-
 import com.pixipanda.sqlautomation.container.DContainer
 import com.pixipanda.sqlautomation.handler.Handler
 import com.pixipanda.sqlautomation.writer.Writer

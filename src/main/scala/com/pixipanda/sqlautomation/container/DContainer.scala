@@ -6,13 +6,13 @@ import scala.collection.mutable
 
 class DContainer() {
 
- var keyValue: Map[String, DataFrame] =  Map().empty
- var dfs: Seq[DataFrame] = List()
+  var keyValue: Map[String, DataFrame] =  Map().empty
+  var dfs: Seq[DataFrame] = List()
 
 
- def isEmpty: Boolean = {
-   keyValue.isEmpty && dfs.isEmpty
- }
+  def isEmpty: Boolean = {
+    keyValue.isEmpty && dfs.isEmpty
+  }
 
 }
 
@@ -25,7 +25,7 @@ object DContainer {
 
 
   /*
-   This function will create a container given the dataFrame
+   This function will create a container with the given dataFrame
   */
   def apply(df: DataFrame): DContainer = {
 
@@ -33,9 +33,9 @@ object DContainer {
     container.dfs = Seq(df)
     container
   }
-  
+
   /*
-    This function will create a container given viewName and the dataFrame
+    This function will create a container with the given viewName and the dataFrame
   */
   def apply(viewName: Option[String], df: DataFrame): DContainer = {
 
@@ -48,7 +48,7 @@ object DContainer {
   }
 
   /*
-    This function will create a container key the keyValue of view and df and a collection of dataframe
+    This function will create a container from the keyValues and collection of dataFrames
   */
   private def apply(keyValue: Map[String, DataFrame], dfs: Seq[DataFrame]) = {
 
@@ -58,9 +58,9 @@ object DContainer {
     container
   }
 
-  
+
   /*
-    This function will merge a give seq of containers into a single container
+    This function will merge a given collection of containers into a single container
   */
   def mergeContainers(containers: Seq[DContainer]):DContainer = {
 
@@ -78,6 +78,9 @@ object DContainer {
   }
 
 
+  /*
+   This function will return an empty container
+  */
   def emptyContainer(): DContainer = {
     new DContainer
   }
