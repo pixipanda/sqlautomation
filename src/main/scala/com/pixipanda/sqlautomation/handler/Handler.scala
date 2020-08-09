@@ -1,8 +1,8 @@
 package com.pixipanda.sqlautomation.handler
 
-trait Handler {
+trait Handler[I, O] {
 
-  def process(): Unit
+  def process(input: I): O
 
 }
 

@@ -1,15 +1,23 @@
 package com.pixipanda.sqlautomation
 
 import com.pixipanda.sqlautomation.config.ConfigRegistry
-import com.pixipanda.sqlautomation.pipeline.ETLPipeline
+import com.pixipanda.sqlautomation.container.DContainer
+import com.pixipanda.sqlautomation.pipeline.Pipeline
 
 
 object Main extends Spark {
-  def main(args: Array[String]): Unit = {
-    val env = args(0)
-    ConfigRegistry.setEnv(env)
+
+  def buildPipeline: Pipeline[Unit, _ >: Unit with DContainer] = {
     ConfigRegistry.parseConfig()
-    val etlPipeline = ETLPipeline.buildPipeline(ConfigRegistry.sqlAutomate)
-    etlPipeline.process()
+    ConfigRegistry.debugAppConfig()
+    Pipeline.buildPipeline(ConfigRegistry.appConfig)
+  }
+
+  def runPipeline(): Unit = {
+    buildPipeline.process()
+  }
+
+  def main(args: Array[String]): Unit = {
+    runPipeline()
   }
 }
