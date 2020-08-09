@@ -1,7 +1,7 @@
 package com.pixipanda.sqlautomation
 
-import org.apache.spark.sql.{SQLContext, SparkSession}
 import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.spark.sql.{SQLContext, SparkSession}
 
 trait Spark {
   implicit lazy val spark: SparkSession = Spark.sparkSingleton
@@ -11,11 +11,7 @@ trait Spark {
 
 object Spark {
 
-  private def isLinux = {
-    "Linux" == System.getProperty("os.name")
-  }
-
-  lazy val sparkSingleton: SparkSession = if(isLinux) {
+  lazy val sparkSingleton: SparkSession = {
 
     val sparkConf: SparkConf = new SparkConf()
       .set("hive.exec.dynamic.partition", "true")
@@ -30,14 +26,6 @@ object Spark {
       .enableHiveSupport()
       .getOrCreate()
 
-  }
-  else {
-    SparkSession
-      .builder()
-      .config("spark.executor.memory", "512mb")
-      .config("spark.ui.showConsoleProgress", value = false)
-      .master("local[2]")
-      .getOrCreate()
   }
 }
 

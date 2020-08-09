@@ -36,7 +36,7 @@ object JdbcConfig {
   lazy val jdbcConfigs: Map[String, JdbcConfig] = config match {
     case Some(config) => parseJdbc(config)
     case None =>
-      logger.error("Empty config file")
+      logger.info("Empty config file")
       Map.empty[String, JdbcConfig]
   }
 
