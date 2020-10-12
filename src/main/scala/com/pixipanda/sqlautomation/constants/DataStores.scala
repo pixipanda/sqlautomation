@@ -10,4 +10,5 @@ object DataStores {
   val ORC = "orc"
   val PARQUET = "parquet"
   val FTPSERVER = "ftpServer"
+  val MYSQL = "mysql"
 }
