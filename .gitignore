@@ -1,13 +1,7 @@
-.idea/
-idea
-./idea/
-.target/
-./target/
+idea/
+target/
 build-files
 metastore_db/
-./metastore_db/
 derby.log
 sqlautomation.iml
-./sqlautomation.iml
-./spark-warehouse/
-.spark-warehouse/
+spark-warehouse/

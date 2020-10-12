@@ -11,17 +11,28 @@ class CsvReaderSpec extends FunSpec{
     describe("Functionality") {
 
       val csvOptions = Map(
-        "path" -> "/tmp/csvfiles/input/employee.csv",
+        "path" -> "/home/hduser/data/india/wf/employee/employee.csv",
         "format" -> "csv",
-        "header" -> "true",
-        "inferSchema" -> "true"
+        "header" -> "true"
       )
-      val csvSourceConfig = SourceConfig("csv", None, csvOptions)
+      val csvSourceConfig = SourceConfig("csv", None, csvOptions + ("inferSchema" -> "true"), None)
+      val csvSourceSchemaConfig = SourceConfig("csv", None, csvOptions, Some("src/test/resources/jobs/csv_schema_to_hive/schema.avsc"))
 
-      it("should read csv file1") {
+      it("should read csv file from /home/hduser/data/india/wf/employee/employee.csv and create a dataFrame") {
 
         val expected = TestUtils.employees
         val csvReader = FileReader(csvSourceConfig)
+        val container = csvReader.read
+
+        val sut = TestUtils.employeeDFToSeq(container.dfs.head)
+        assert(sut == expected)
+      }
+
+
+      it("should read csv file from /home/hduser/data/india/wf/employee/employee.csv with given given schema and create a dataFrame") {
+
+        val expected = TestUtils.employees
+        val csvReader = FileReader(csvSourceSchemaConfig)
         val container = csvReader.read
 
         val sut = TestUtils.employeeDFToSeq(container.dfs.head)

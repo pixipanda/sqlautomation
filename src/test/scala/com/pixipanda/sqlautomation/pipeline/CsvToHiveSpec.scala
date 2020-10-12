@@ -22,6 +22,15 @@ class CsvToHiveSpec extends FunSpec with  TestingSparkSession{
         val sut = TestUtils.employeeDFToSeq(df)
         assert(sut.sortBy(_.emp_id) == expected)
       }
+
+      it("should extract csv file with the given schema and load to hive as orc using csv_schema_to_hive config file") {
+        val expected = TestUtils.employees
+
+        TestUtils.runPipeline("src/test/resources/jobs/csv_schema_to_hive/csv_schema_to_hive.conf")
+        val df = spark.sql("SELECT * from test_db1.employee")
+        val sut = TestUtils.employeeDFToSeq(df)
+        assert(sut.sortBy(_.emp_id) == expected)
+      }
     }
   }
 }
