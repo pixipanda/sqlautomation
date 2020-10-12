@@ -1,0 +1,13 @@
+{
+   "type" : "record",
+   "namespace" : "pixipanda",
+   "name" : "Employee",
+   "fields" : [
+      { "name" : "emp_id" , "type" : "int" },
+      { "name" : "name" , "type" : "string" },
+      { "name" : "superior_emp_id" , "type" : "int" },
+      { "name" : "emp_dept_id" , "type" : "int" },
+      { "name" : "gender" , "type" : "string" },
+      { "name" : "salary" , "type" : "double" }
+   ]
+}

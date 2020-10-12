@@ -16,7 +16,7 @@ object ConfigUtils {
     "hdfsTempLocation" -> "/tmp/hdfs_tmp",
     "path" -> "/tmp/csvfiles/input/employee.csv"
   )
-  val ftpSourceConfig: SourceConfig = SourceConfig("ftpServer", None, ftpSourceOptions)
+  val ftpSourceConfig: SourceConfig = SourceConfig("ftpServer", None, ftpSourceOptions, None)
 
   val csvSourceOptions: Map[String, String] = Map(
     "path" -> "/tmp/csvfiles/input/employee.csv",
@@ -24,15 +24,16 @@ object ConfigUtils {
     "header" -> "true",
     "inferSchema" -> "true"
   )
-  val csvSourceConfig: SourceConfig = SourceConfig("csv", None, csvSourceOptions)
-  val csvSourceViewConfig: SourceConfig = SourceConfig("csv", Some("employeeView"), csvSourceOptions)
+  val csvSourceConfig: SourceConfig = SourceConfig("csv", None, csvSourceOptions, None)
+  val csvSourceSchemaConfig: SourceConfig = SourceConfig("csv", None, csvSourceOptions, Some("src/test/resources/jobs/csv_schema_to_hive/schema.avsc"))
+  val csvSourceViewConfig: SourceConfig = SourceConfig("csv", Some("employeeView"), csvSourceOptions, None)
 
   val hiveSourceOptions: Map[String, String] = Map(
     "db" -> "test_db1",
     "table" -> "employee",
     "format" -> "orc"
   )
-  val hiveSourceConfig: SourceConfig = SourceConfig("hive", None, hiveSourceOptions)
+  val hiveSourceConfig: SourceConfig = SourceConfig("hive", None, hiveSourceOptions, None)
 
 
   val extractConfig: ExtractConfig = ExtractConfig(List(ftpSourceConfig))
@@ -53,7 +54,7 @@ object ConfigUtils {
     "server" -> "lxhdpsatqa001",
     "username" -> "hdpbatch"
   )
-  val ftpSinkConfig: SourceConfig = SourceConfig("ftpServer", None, ftpSinkOptions)
+
 
   val csvSinkOptions: Map[String, String] = Map(
     "path" -> "/tmp/csvfiles/output",
