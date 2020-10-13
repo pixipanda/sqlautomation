@@ -5,7 +5,7 @@ import com.pixipanda.sqlautomation.container.DContainer
 import com.pixipanda.sqlautomation.factory.HandlerFactory
 import com.pixipanda.sqlautomation.handler.Handler
 import com.pixipanda.sqlautomation.handler.extract.EmptyExtractHandler
-import org.apache.log4j.Logger
+import org.slf4j.{Logger, LoggerFactory}
 
 case class Pipeline[I, O](currentHandler: Handler[I, O]) {
 
@@ -26,11 +26,11 @@ case class Pipeline[I, O](currentHandler: Handler[I, O]) {
 
 object Pipeline {
 
-  val logger: Logger = Logger.getLogger(getClass.getName)
+  val LOGGER: Logger = LoggerFactory.getLogger(getClass.getName)
 
   def buildPipeline(appConfig: AppConfig): Pipeline[Unit, _ >: Unit with DContainer] = {
 
-    logger.info("Building Pipeline")
+    LOGGER.info("Building Pipeline")
 
     val extractPipeline = appConfig.extractConfig match {
       case Some(extractConfig) =>
@@ -38,6 +38,8 @@ object Pipeline {
         Pipeline(extractHandler)
       case None => Pipeline(EmptyExtractHandler())
     }
+
+    LOGGER.info(s"Extract Pipeline: $extractPipeline")
 
     val transformPipeline = appConfig.transformConfig match {
       case Some(transformConfig) =>
@@ -48,12 +50,16 @@ object Pipeline {
       case None => extractPipeline
     }
 
+    LOGGER.info(s"Transform Pipeline: $transformPipeline")
+
     val loadPipeline = appConfig.loadConfig match {
       case Some(loadConfig) =>
         val loadHandler = HandlerFactory.getHandler(loadConfig)
         transformPipeline.addHandler(loadHandler)
       case None => transformPipeline
     }
+
+    LOGGER.info(s"Complete Pipeline: $loadPipeline")
 
     loadPipeline
 

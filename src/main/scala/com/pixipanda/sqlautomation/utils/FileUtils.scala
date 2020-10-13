@@ -4,11 +4,11 @@ import java.io.File
 
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{FileSystem, Path}
-import org.apache.log4j.Logger
+import org.slf4j.{Logger, LoggerFactory}
 
 object FileUtils {
 
-  val logger: Logger = Logger.getLogger(getClass.getName)
+  val LOGGER: Logger = LoggerFactory.getLogger(getClass.getName)
 
   def createConfiguration: Configuration = {
     val hadoopConf = new Configuration()
@@ -31,21 +31,21 @@ object FileUtils {
 
   def renamePartFile(conf: Configuration, path: String, fileName: String):Unit = {
 
-    logger.debug(s"path: $path fileName: $fileName")
+    LOGGER.debug(s"path: $path fileName: $fileName")
 
     val fs = FileSystem.get(conf)
     val file = new Path(s"$path/$fileName")
     if(fs.exists(file)) {
-      logger.debug(s"Deleting the file: $file")
+      LOGGER.debug(s"Deleting the file: $file")
       fs.delete(new Path(s"$path/$fileName"), true)
     }
 
     val partFileName = fs.globStatus(new Path(s"$path/part*"))(0).getPath.getName
     val result = fs.rename(new Path(s"$path/$partFileName"), file)
     if(result) {
-      logger.info("Successfully renamed")
+      LOGGER.info("Successfully renamed")
     } else {
-      logger.error("Failed to rename")
+      LOGGER.error("Failed to rename")
     }
   }
 
@@ -59,7 +59,7 @@ object FileUtils {
         fs.copyFromLocalFile(new Path(file.getPath), new Path(destHDFSDir, file.getName))
       })
     }else {
-      logger.error(s"local dir $srcLocalDir do not exist")
+      LOGGER.error(s"local dir $srcLocalDir do not exist")
     }
   }
 

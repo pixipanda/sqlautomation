@@ -24,8 +24,8 @@ object SourceConfig {
     val options = Options.parse(optionsConfig)
     val schemaPath = parseSchemaPath(config)
 
-    LOGGER.info(s"options: $options")
-
-    SourceConfig(sourceType, viewName, options, schemaPath)
+    val sourceConfig = SourceConfig(sourceType, viewName, options, schemaPath)
+    LOGGER.info(s"sourceConfig: $sourceConfig")
+    sourceConfig
   }
 }

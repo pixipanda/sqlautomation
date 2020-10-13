@@ -7,11 +7,11 @@ import com.pixipanda.sqlautomation.config.common.SourceConfig
 import com.pixipanda.sqlautomation.container.DContainer
 import com.pixipanda.sqlautomation.reader.Reader
 import com.pixipanda.sqlautomation.utils.FileUtils
-import org.apache.log4j.Logger
+import org.slf4j.{Logger, LoggerFactory}
 
 case class FtpReader(sourceConfig: SourceConfig) extends Reader {
 
-  val logger: Logger = Logger.getLogger(getClass.getName)
+  val LOGGER: Logger = LoggerFactory.getLogger(getClass.getName)
 
 
   private def getValue(param: Option[String]): String = {
@@ -50,7 +50,7 @@ case class FtpReader(sourceConfig: SourceConfig) extends Reader {
   }
 
   private def addShutdownHook(tempLocation: String) {
-    logger.info("Adding hook for file " + tempLocation)
+    LOGGER.info("Adding hook for file " + tempLocation)
     val hook = new DeleteTempFileShutdownHook(tempLocation)
     Runtime.getRuntime.addShutdownHook(hook)
   }
@@ -60,10 +60,10 @@ case class FtpReader(sourceConfig: SourceConfig) extends Reader {
     var copiedFilePath: String = null
     try {
       if (latest) {
-        logger.info("Downloading latest from " + source + " to " + tempFolder)
+        LOGGER.info("Downloading latest from " + source + " to " + tempFolder)
         copiedFilePath = sftpClient.copyLatest(source, tempFolder)
       } else {
-        logger.info("Downloading " + source + " to " + tempFolder)
+        LOGGER.info("Downloading " + source + " to " + tempFolder)
         copiedFilePath = sftpClient.copy(source, tempFolder)
       }
       tempFolder
@@ -89,12 +89,12 @@ case class FtpReader(sourceConfig: SourceConfig) extends Reader {
     val cryptoKey = ftpOptions.getOrElse("cryptoKey", null)
     val cryptoAlgorithm = ftpOptions.getOrElse("cryptoAlgorithm", "AES")
 
-    logger.info(s"Reading from ftpServer $host source is $path and target is $HDFSTemp")
+    LOGGER.info(s"Reading from ftpServer $host source is $path and target is $HDFSTemp")
 
     val sftpClient = getSFTPClient(username, password, pemFileLocation, pemPassphrase, host, port, cryptoKey,cryptoAlgorithm)
     if(sftpClient.exist(path)) {
       copy(sftpClient, path,tmpFolder, copyLatest.toBoolean)
-      logger.info(s"Copying to HDFS from $tmpFolder to $HDFSTemp")
+      LOGGER.info(s"Copying to HDFS from $tmpFolder to $HDFSTemp")
       FileUtils.copyToHDFS(tmpFolder, HDFSTemp)
     }
     DContainer.emptyContainer()
