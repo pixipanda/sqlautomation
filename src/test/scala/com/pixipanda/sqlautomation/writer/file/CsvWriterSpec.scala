@@ -22,7 +22,7 @@ class CsvWriterSpec extends FunSpec{
 
       it("should write csv file") {
         val empDF = TestUtils.empDF
-        val input = DContainer(empDF)
+        val input = new DContainer(empDF)
         val csvWriter = FileWriter(ConfigUtils.csvSinkConfig)
         csvWriter.write(input)
 
@@ -41,7 +41,7 @@ class CsvWriterSpec extends FunSpec{
         val csvSinkConfig = SinkConfig("csv", None, csvSinkOptions)
 
         val empDF = TestUtils.empDF
-        val input = DContainer(empDF)
+        val input = new DContainer(empDF)
         val csvWriter = FileWriter(csvSinkConfig)
         csvWriter.write(input)
 
