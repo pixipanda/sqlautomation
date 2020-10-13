@@ -1,13 +1,14 @@
 package com.pixipanda.sqlautomation.config.common
 
 import com.typesafe.config.Config
-import org.apache.log4j.Logger
+import org.slf4j.{Logger, LoggerFactory}
 
 case class SourceConfig(sourceType: String, viewName: Option[String], options: Map[String, String], schemaPath: Option[String])
 
 object SourceConfig {
 
-  val LOGGER: Logger = Logger.getLogger(getClass.getName)
+  val LOGGER: Logger = LoggerFactory.getLogger(getClass.getName)
+
 
   def parseViewName(config: Config): Option[String] = {
     if(config.hasPath("viewName")) Some(config.getString("viewName")) else None

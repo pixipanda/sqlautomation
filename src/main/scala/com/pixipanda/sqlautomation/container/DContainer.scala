@@ -2,14 +2,40 @@ package com.pixipanda.sqlautomation.container
 
 import org.apache.spark.sql.DataFrame
 
-import scala.collection.mutable
+case class DContainer(keyValue: Map[String, DataFrame], dfs: Seq[DataFrame]) {
 
-class DContainer() {
+  /*
+   * This constructor will create an empty container objectt
+   */
+  def this() {
+    this(Map[String, DataFrame](), List[DataFrame]())
+  }
 
-  var keyValue: Map[String, DataFrame] =  Map().empty
-  var dfs: Seq[DataFrame] = List()
+  /*
+   * This constructor will create a container object with the given dataFrame
+   */
+  def this(df: DataFrame) {
+    this(Map[String, DataFrame](), Seq(df))
+  }
+
+  /*
+   * This constructor will create a container object with the given collection of dataFrames
+   */
+  def this(dfs: Seq[DataFrame]) {
+    this(Map[String, DataFrame](), dfs)
+  }
 
 
+  /*
+   * This constructor will create a container object for the given keyvalue of viewName and DataFrame
+   */
+  def this(keyValue: Map[String, DataFrame]) {
+    this(keyValue, List[DataFrame]())
+  }
+
+  /*
+   * This function will check
+   */
   def isEmpty: Boolean = {
     keyValue.isEmpty && dfs.isEmpty
   }
@@ -19,64 +45,25 @@ class DContainer() {
 object DContainer {
 
   /*
-     This function will create empty container
-  */
-  def apply(): DContainer = new DContainer()
-
-
-  /*
-   This function will create a container with the given dataFrame
-  */
-  def apply(df: DataFrame): DContainer = {
-
-    val container = new DContainer()
-    container.dfs = Seq(df)
-    container
-  }
-
-  /*
     This function will create a container with the given viewName and the dataFrame
   */
   def apply(viewName: Option[String], df: DataFrame): DContainer = {
 
-    val container = new DContainer()
     viewName match {
-      case Some(view) => container.keyValue = Map(view -> df)
-      case None => container.dfs = List(df)
+      case Some(view) => new DContainer(Map(view -> df))
+      case None => new DContainer(df)
     }
-    container
   }
-
-  /*
-    This function will create a container from the keyValues and collection of dataFrames
-  */
-  private def apply(keyValue: Map[String, DataFrame], dfs: Seq[DataFrame]) = {
-
-    val container = new DContainer()
-    container.keyValue = keyValue
-    container.dfs = dfs
-    container
-  }
-
 
   /*
     This function will merge a given collection of containers into a single container
   */
   def mergeContainers(containers: Seq[DContainer]):DContainer = {
 
-    val newKeyValue = mutable.Map[String, DataFrame]()
-    val newDfs = mutable.ListBuffer[DataFrame]()
-
-    containers.foreach(container => {
-      newDfs.append(container.dfs: _*)
-      container.keyValue.foreach{
-        case(key, value) => newKeyValue.put(key, value)
-      }
-    })
-
-    DContainer(newKeyValue.toMap, newDfs.toList)
+    val newKeyValue = containers.map(dc => dc.keyValue).reduce(_ ++ _)
+    val newDFs = containers.map(dc => dc.dfs).reduce(_ ++ _)
+    new DContainer(newKeyValue, newDFs)
   }
-
 
   /*
    This function will return an empty container
