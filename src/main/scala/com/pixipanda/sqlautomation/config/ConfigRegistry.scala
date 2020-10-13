@@ -4,13 +4,14 @@ package com.pixipanda.sqlautomation.config
 import java.io.File
 
 import com.typesafe.config.{Config, ConfigFactory}
-import org.apache.log4j.Logger
+import org.slf4j.{Logger, LoggerFactory}
+
 
 
 
 object ConfigRegistry {
 
-  val logger: Logger = Logger.getLogger(getClass.getName)
+  val LOGGER: Logger = LoggerFactory.getLogger(getClass.getName)
 
   private var _env: String = _
 
@@ -35,9 +36,9 @@ object ConfigRegistry {
   def clear(): Unit = _config = null
 
   def debugAppConfig(): Unit = {
-    logger.debug(appConfig.extractConfig)
-    logger.debug(appConfig.transformConfig)
-    logger.debug(appConfig.loadConfig)
+    LOGGER.debug(s"Extract Config: ${appConfig.extractConfig}")
+    LOGGER.debug(s"Transform Config: ${appConfig.transformConfig}")
+    LOGGER.debug(s"Load Config: ${appConfig.loadConfig}")
 
   }
 }

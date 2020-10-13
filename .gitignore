@@ -6,3 +6,6 @@ metastore_db/
 derby.log
 sqlautomation.iml
 spark-warehouse/
+test_db1.db/
+app.json
+app.log

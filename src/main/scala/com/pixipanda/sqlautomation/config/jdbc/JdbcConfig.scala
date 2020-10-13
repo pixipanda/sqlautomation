@@ -4,7 +4,7 @@ import java.util.Properties
 
 import com.pixipanda.sqlautomation.config.ConfigRegistry
 import com.typesafe.config.{Config, ConfigFactory}
-import org.apache.log4j.Logger
+import org.slf4j.{Logger, LoggerFactory}
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable
@@ -19,7 +19,7 @@ case class JdbcConfig(name:String,
 object JdbcConfig {
 
 
-  val logger: Logger = Logger.getLogger(getClass.getName)
+  val LOGGER: Logger = LoggerFactory.getLogger(getClass.getName)
 
   def config: Option[Config] = {
     val env = ConfigRegistry.getEnv
@@ -36,7 +36,7 @@ object JdbcConfig {
   lazy val jdbcConfigs: Map[String, JdbcConfig] = config match {
     case Some(config) => parseJdbc(config)
     case None =>
-      logger.info("Empty config file")
+      LOGGER.info("Empty config file")
       Map.empty[String, JdbcConfig]
   }
 

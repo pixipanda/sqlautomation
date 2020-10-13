@@ -2,14 +2,14 @@ package com.pixipanda.sqlautomation.handler.transform
 
 import com.pixipanda.sqlautomation.Spark
 import com.pixipanda.sqlautomation.container.DContainer
-import org.apache.log4j.Logger
 import org.apache.spark.sql.DataFrame
+import org.slf4j.{Logger, LoggerFactory}
 
 case class QueryTransformHandler(query: String, viewName: Option[String])
   extends TransformHandler[DContainer, DContainer](query, viewName)
     with Spark {
 
-  val logger: Logger = Logger.getLogger(getClass.getName)
+  val LOGGER: Logger = LoggerFactory.getLogger(getClass.getName)
 
   def createViews(container: DContainer): Unit = {
     container.keyValue.foreach {
@@ -23,7 +23,7 @@ case class QueryTransformHandler(query: String, viewName: Option[String])
     if(!input.isEmpty) {
       createViews(input)
     }
-    logger.info(s"query: $query viewName: $viewName")
+    LOGGER.info(s"query: $query viewName: $viewName")
     val df = spark.sql(query)
     DContainer(viewName, df)
   }
