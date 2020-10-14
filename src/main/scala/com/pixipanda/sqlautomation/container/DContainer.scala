@@ -2,34 +2,36 @@ package com.pixipanda.sqlautomation.container
 
 import org.apache.spark.sql.DataFrame
 
-case class DContainer(keyValue: Map[String, DataFrame], dfs: Seq[DataFrame]) {
+case class ViewOptions(df: DataFrame, options: Map[String, String])
+
+case class DContainer(keyValue: Map[String, ViewOptions], dfs: Seq[DataFrame]) {
 
   /*
    * This constructor will create an empty container objectt
    */
   def this() {
-    this(Map[String, DataFrame](), List[DataFrame]())
+    this(Map[String, ViewOptions](), List[DataFrame]())
   }
 
   /*
    * This constructor will create a container object with the given dataFrame
    */
   def this(df: DataFrame) {
-    this(Map[String, DataFrame](), Seq(df))
+    this(Map[String, ViewOptions](), Seq(df))
   }
 
   /*
    * This constructor will create a container object with the given collection of dataFrames
    */
   def this(dfs: Seq[DataFrame]) {
-    this(Map[String, DataFrame](), dfs)
+    this(Map[String, ViewOptions](), dfs)
   }
 
 
   /*
    * This constructor will create a container object for the given keyvalue of viewName and DataFrame
    */
-  def this(keyValue: Map[String, DataFrame]) {
+  def this(keyValue: Map[String, ViewOptions]) {
     this(keyValue, List[DataFrame]())
   }
 
@@ -45,12 +47,17 @@ case class DContainer(keyValue: Map[String, DataFrame], dfs: Seq[DataFrame]) {
 object DContainer {
 
   /*
-    This function will create a container with the given viewName and the dataFrame
+    This function will create a container with the given viewName, dataFrame and the all the options related to the view
   */
-  def apply(viewName: Option[String], df: DataFrame): DContainer = {
+  def apply(viewName: Option[String], df: DataFrame, options: Option[Map[String, String]]): DContainer = {
 
     viewName match {
-      case Some(view) => new DContainer(Map(view -> df))
+      case Some(view) =>
+        val viewOptions = options match {
+          case Some(o) => ViewOptions(df, o)
+          case None =>  ViewOptions(df, Map[String, String]())
+        }
+        new DContainer(Map(view -> viewOptions))
       case None => new DContainer(df)
     }
   }

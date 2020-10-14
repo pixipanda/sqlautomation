@@ -15,8 +15,8 @@ class CsvReaderSpec extends FunSpec{
         "format" -> "csv",
         "header" -> "true"
       )
-      val csvSourceConfig = SourceConfig("csv", None, csvOptions + ("inferSchema" -> "true"), None)
-      val csvSourceSchemaConfig = SourceConfig("csv", None, csvOptions, Some("src/test/resources/jobs/csv_schema_to_hive/schema.avsc"))
+      val csvSourceConfig = SourceConfig("csv", None, csvOptions + ("inferSchema" -> "true"), None, None)
+      val csvSourceSchemaConfig = SourceConfig("csv", None, csvOptions, None, Some("src/test/resources/jobs/csv_schema_to_hive/schema.avsc"))
 
       it("should read csv file from /home/hduser/data/india/wf/employee/employee.csv and create a dataFrame") {
 

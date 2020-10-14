@@ -1,4 +1,4 @@
-package com.pixipanda.sqlautomation.factory
+package com.pixipanda.sqlautomation.handler
 
 import com.pixipanda.sqlautomation.config.etl.extract.ExtractConfig
 import com.pixipanda.sqlautomation.config.etl.load.LoadConfig
@@ -6,11 +6,13 @@ import com.pixipanda.sqlautomation.config.etl.transform.TransformConfig
 import com.pixipanda.sqlautomation.handler.extract.ExtractHandler
 import com.pixipanda.sqlautomation.handler.load.LoadHandler
 import com.pixipanda.sqlautomation.handler.transform.QueryTransformHandler
+import com.pixipanda.sqlautomation.reader.ReaderFactory
+import com.pixipanda.sqlautomation.writer.WriterFactory
 
 object HandlerFactory {
 
   /*
-   Given extract config. it will return extact handler
+   Given extract config. it will return extract handlers
   */
   def getHandler(extractConfig: ExtractConfig): ExtractHandler = {
     val readers = extractConfig.sourceConfigs.map(ReaderFactory.getReader)
@@ -18,14 +20,14 @@ object HandlerFactory {
   }
 
   /*
-   Given transform config. it will return a collection of transform handler
+   Given transform config. it will return a collection of transform handlers
   */
   def getHandler(transformConfig: TransformConfig): Seq[QueryTransformHandler] = {
     transformConfig.sqlConfigs.flatMap(sqlConfig => {
       sqlConfig.queryConfigs.map(queryConfig => {
         val query = queryConfig.query
         val vieName = queryConfig.viewName
-        QueryTransformHandler(query, vieName)
+        QueryTransformHandler(query, vieName, queryConfig.viewOptions)
       })
     })
   }

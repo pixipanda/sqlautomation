@@ -68,6 +68,6 @@ case class FileReader(sourceConfig: SourceConfig) extends Reader with Spark{
         .load(fileOptions("path"))
     }
 
-    DContainer(sourceConfig.viewName, df)
+    DContainer(sourceConfig.viewName, df, sourceConfig.viewOptions)
   }
 }

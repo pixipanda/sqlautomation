@@ -60,7 +60,7 @@ class ExtractSpec extends FunSpec {
           |    {
           |      sourceType = "csv"
           |      options {
-          |        path = "/tmp/csvfiles/input/employee.csv"
+          |        path = "/home/hduser/data/india/wf/employee/employee.csv"
           |        format = "csv"
           |        inferSchema = "true"
           |        header = "true"
