@@ -1,8 +1,7 @@
-package com.pixipanda.sqlautomation.factory
+package com.pixipanda.sqlautomation.reader
 
 import com.pixipanda.sqlautomation.config.common.SourceConfig
 import com.pixipanda.sqlautomation.constants.DataStores._
-import com.pixipanda.sqlautomation.reader.Reader
 import com.pixipanda.sqlautomation.reader.file.FileReader
 import com.pixipanda.sqlautomation.reader.ftp.FtpReader
 import com.pixipanda.sqlautomation.reader.jdbc.JDBCReader

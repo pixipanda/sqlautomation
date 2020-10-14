@@ -1,6 +1,6 @@
-package com.pixipanda.sqlautomation.factory
+package com.pixipanda.sqlautomation.reader
 
-import com.pixipanda.sqlautomation.config.{ConfigRegistry, ConfigUtils}
+import com.pixipanda.sqlautomation.config.ConfigRegistry
 import com.pixipanda.sqlautomation.reader.file.FileReader
 import com.pixipanda.sqlautomation.reader.ftp.FtpReader
 import org.scalatest.FunSpec

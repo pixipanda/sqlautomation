@@ -1,7 +1,6 @@
-package com.pixipanda.sqlautomation.factory
+package com.pixipanda.sqlautomation.writer
 
 import com.pixipanda.sqlautomation.config.ConfigRegistry
-import com.pixipanda.sqlautomation.writer.HiveWriter
 import com.pixipanda.sqlautomation.writer.file.FileWriter
 import org.scalatest.FunSpec
 

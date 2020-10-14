@@ -1,8 +1,7 @@
-package com.pixipanda.sqlautomation.factory
+package com.pixipanda.sqlautomation.writer
 
 import com.pixipanda.sqlautomation.config.common.SinkConfig
 import com.pixipanda.sqlautomation.constants.DataStores._
-import com.pixipanda.sqlautomation.writer.{HiveWriter, Writer}
 import com.pixipanda.sqlautomation.writer.file.FileWriter
 
 object WriterFactory {

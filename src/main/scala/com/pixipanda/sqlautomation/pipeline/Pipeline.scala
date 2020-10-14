@@ -2,8 +2,7 @@ package com.pixipanda.sqlautomation.pipeline
 
 import com.pixipanda.sqlautomation.config.AppConfig
 import com.pixipanda.sqlautomation.container.DContainer
-import com.pixipanda.sqlautomation.factory.HandlerFactory
-import com.pixipanda.sqlautomation.handler.Handler
+import com.pixipanda.sqlautomation.handler.{Handler, HandlerFactory}
 import com.pixipanda.sqlautomation.handler.extract.EmptyExtractHandler
 import org.slf4j.{Logger, LoggerFactory}
 

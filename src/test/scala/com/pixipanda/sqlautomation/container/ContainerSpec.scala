@@ -23,7 +23,7 @@ class ContainerSpec extends FunSpec with TestingSparkSession{
       }
 
       it("should create container from the given view and dataframe") {
-        val sut = DContainer(Some(viewName1), df1)
+        val sut = DContainer(Some(viewName1), df1, None)
         assert(!sut.isEmpty)
         assert(sut.keyValue.size == 1)
         assert(sut.dfs.isEmpty)
@@ -39,7 +39,7 @@ class ContainerSpec extends FunSpec with TestingSparkSession{
 
       it("should merge container") {
 
-        val containers = List(DContainer(Some(viewName1), df1), DContainer(Some(viewName2), df2))
+        val containers = List(DContainer(Some(viewName1), df1, None), DContainer(Some(viewName2), df2, None))
         val sut = DContainer.mergeContainers(containers)
         assert(!sut.isEmpty)
         assert(sut.keyValue.size == 2)

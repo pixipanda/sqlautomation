@@ -17,7 +17,7 @@ class CsvWriterSpec extends FunSpec{
         "header" -> "true",
         "inferSchema" -> "true"
       )
-      val csvSourceConfig = SourceConfig("csv", None, csvSourceOption, None)
+      val csvSourceConfig = SourceConfig("csv", None, csvSourceOption, None, None)
 
 
       it("should write csv file") {

@@ -20,6 +20,6 @@ case class JDBCReader(sourceConfig: SourceConfig) extends Reader with  Spark{
         .format(jdbcOptions("format"))
         .options(jdbcOptions)
         .load()
-    DContainer(sourceConfig.viewName, df)
+    DContainer(sourceConfig.viewName, df, sourceConfig.viewOptions)
   }
 }
