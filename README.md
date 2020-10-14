@@ -1,10 +1,13 @@
 ETL
 =====================================
 ```text
-1. This framework helps to extract data from multiple sources, 
-   transform the data by running sql queries and 
+1. This framework helps to extract data from multiple sources, transform the data by running sql queries and 
    load the transformed to multiple sinks. 
 2. It is implemented using Apache Spark 2.3
+3. While reading data from File sources, you can specify explicit schema.Schema must be specified as avsc file(Avro Schema)
+   ex: src/test/resources/jobs/csv_schema_to_hive
+4. It supports caching. ex: src/test/resources/jobs/cache_hive_to_hive_partition
+
 ```
 
 Supported Data stores
@@ -12,7 +15,7 @@ Supported Data stores
 ```text
 Data could be extracted from 
    HIVE,
-   FILES like CSV, XML, JSON, ORC, PARQUET,AVRO, FTPSERVER
+   FILES like CSV, XML, JSON, ORC, PARQUET,AVRO, FTPSERVER, JDBC like MYSQL, ORACLE, POSTGRES, etc
 Data could be load to 
    HIVE,   
    FILES like CSV, XML, JSON, ORC, PARQUET and AVRO
