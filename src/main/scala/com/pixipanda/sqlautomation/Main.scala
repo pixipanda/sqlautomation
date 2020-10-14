@@ -36,6 +36,8 @@ object Main extends Spark {
   }
 
   def main(args: Array[String]): Unit = {
+    val loggerConfigFile = args(0)
+    configLogging(loggerConfigFile)
     runPipeline()
   }
 }
